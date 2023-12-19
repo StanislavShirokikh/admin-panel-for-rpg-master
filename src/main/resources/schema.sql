@@ -8,7 +8,7 @@ CREATE TABLE race
 
 CREATE TABLE profession
 (
-    id   SERIAL PRIMARY KEY,
+    id  SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL
 );
 
