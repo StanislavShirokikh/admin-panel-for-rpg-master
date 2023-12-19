@@ -1,5 +1,3 @@
-CREATE DATABASE rpg;
-
 CREATE TABLE race
 (
     id   SERIAL PRIMARY KEY,
@@ -22,6 +20,6 @@ CREATE TABLE player
     profession     INTEGER REFERENCES profession(id),
     level          INTEGER check ( level > 0 ) NOT NULL,
     untilNextLevel INTEGER NOT NULL,
-    birthday       DATE CHECK ( birthday > 2000 AND birthday <=3000)       NULL,
+    birthday       DATE    NOT NULL,
     banned         BOOLEAN NOT NULL
 );
