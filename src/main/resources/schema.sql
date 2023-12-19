@@ -16,9 +16,9 @@ CREATE TABLE player
     name           VARCHAR(12) NOT NULL,
     title          VARCHAR(30) NULL,
     race_id        INTEGER REFERENCES race(id),
-    experience     INTEGER     CHECK ( experience > 0 AND experience <= 10000000 ),
+    experience     INTEGER     CHECK ( 0 < experience AND experience <= 10000000 ),
     profession     INTEGER REFERENCES profession(id),
-    level          INTEGER check ( level > 0 ) NOT NULL,
+    level          INTEGER check ( 0 < level ) NOT NULL,
     untilNextLevel INTEGER NOT NULL,
     birthday       DATE    NOT NULL,
     banned         BOOLEAN NOT NULL
