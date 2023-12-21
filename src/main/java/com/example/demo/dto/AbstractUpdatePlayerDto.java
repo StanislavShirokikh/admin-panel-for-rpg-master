@@ -1,19 +1,18 @@
-package com.example.demo.entity;
+package com.example.demo.dto;
 
+import com.example.demo.entity.Profession;
+import com.example.demo.entity.Race;
 import lombok.Data;
 
 import java.util.Date;
-
 @Data
-public abstract class AbstractPlayer {
+public class AbstractUpdatePlayerDto {
     private Long id;
     private String name;
     private String title;
     private Race race;
     private Profession profession;
-    private Integer level;
     private Integer experience;
-    private Integer untilNextLevel;
     private Date birthday;
     private Boolean banned;
 }
