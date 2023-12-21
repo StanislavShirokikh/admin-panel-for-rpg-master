@@ -21,7 +21,11 @@ public class AdministratorImpl implements AdministratorService{
 
     @Override
     public long createPlayer(SavePlayerDto savePlayerDto) {
-        return 0;
+        Player player = Converter.convertToPlayer(savePlayerDto);
+        player.setLevel(calculateCurrentLevel(player.getExperience()));
+        player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
+
+        return playerDao.createPlayer(player);
     }
 
     @Override
@@ -36,6 +40,14 @@ public class AdministratorImpl implements AdministratorService{
 
     @Override
     public Player getPlayerById(long id) {
-        return null;
+        return playerDao.getPlayerById(id);
+    }
+
+    private int calculateCurrentLevel(int experience) {
+        return (int) ((Math.sqrt(2500 + 200 * experience) - 50) / 100);
+    }
+
+    private int calculateUntilNextLevel(int level, int experience) {
+        return 50 * (level + 1) * (level + 2) - experience;
     }
 }
