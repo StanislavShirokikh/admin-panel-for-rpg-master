@@ -15,7 +15,7 @@ CREATE TABLE player
     PRIMARY KEY (id)
 );
 
-INSERT INTO player(name, title, race, profession, birthday, banned, experience, level, untilNextLevel)
+INSERT INTO player(name, title, race, profession_id, birthday, banned, experience, level, until_next_level)
 VALUES ('Ниус', 'Приходящий Без Шума', 'HOBBIT', 'ROGUE', '2010-10-12', false, 58347, 33, 1153)
      , ('Никрашш', 'НайтВульф', 'ORC', 'WARLOCK', '2010-02-14', false, 174403, 58, 2597)
      , ('Эззэссэль', 'шипящая', 'DWARF', 'CLERIC', '2006-02-28', true, 804, 3, 196)
