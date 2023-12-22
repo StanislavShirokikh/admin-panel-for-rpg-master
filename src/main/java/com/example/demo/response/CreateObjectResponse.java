@@ -1,11 +1,13 @@
-package com.example.demo.entity;
+package com.example.demo.response;
 
+import com.example.demo.entity.Profession;
+import com.example.demo.entity.Race;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
-
 @Data
-public abstract class AbstractPlayer {
+public class CreateObjectResponse {
     private Long id;
     private String name;
     private String title;
@@ -14,6 +16,7 @@ public abstract class AbstractPlayer {
     private Integer level;
     private Integer experience;
     private Integer untilNextLevel;
-    private Date birthday;
+    private LocalDate birthday;
     private Boolean banned;
 }
+

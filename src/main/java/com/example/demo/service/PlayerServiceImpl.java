@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.converter.Converter;
 import com.example.demo.dao.PlayerDao;
 import com.example.demo.dto.SavePlayerDto;
 import com.example.demo.dto.UpdatePlayerDto;
@@ -12,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AdministratorImpl implements AdministratorService{
+public class PlayerServiceImpl implements PlayerService {
     private final PlayerDao playerDao;
     @Override
     public List<Player> getAllPlayers() {
@@ -20,7 +21,7 @@ public class AdministratorImpl implements AdministratorService{
     }
 
     @Override
-    public long createPlayer(SavePlayerDto savePlayerDto) {
+    public Player createPlayer(SavePlayerDto savePlayerDto) {
         Player player = Converter.convertToPlayer(savePlayerDto);
         player.setLevel(calculateCurrentLevel(player.getExperience()));
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));

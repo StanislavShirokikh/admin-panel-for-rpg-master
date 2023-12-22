@@ -20,12 +20,12 @@ import java.util.Map;
 @Slf4j
 @ConditionalOnProperty(name = "app.storage.type", havingValue = "DATABASE")
 @RequiredArgsConstructor
-public class DatabasePlayerDao implements PlayerDao{
+public class PlayerDaoImpl implements PlayerDao{
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simplePlayerJdbcInsert;
 
     @Autowired
-    public DatabasePlayerDao(JdbcTemplate jdbcTemplate) {
+    public PlayerDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.simplePlayerJdbcInsert = new SimpleJdbcInsert(jdbcTemplate){{
             withTableName("player");
@@ -39,7 +39,7 @@ public class DatabasePlayerDao implements PlayerDao{
     }
 
     @Override
-    public long createPlayer(Player player) {
+    public Player createPlayer(Player player) {
         Map<String, Object> map = new HashMap<>() {{
             put("name", player.getName());
             put("title", player.getTitle());
@@ -51,7 +51,14 @@ public class DatabasePlayerDao implements PlayerDao{
             put("birthday", player.getBirthday());
             put("banned", player.getBanned());
         }};
-        return simplePlayerJdbcInsert.executeAndReturnKey(map).longValue();
+        long id = simplePlayerJdbcInsert.executeAndReturnKey(map).longValue();
+
+        String sql = "SELECT id, name, title, race_id, profession_id, level, experience," +
+                "until_next_level, birthday, banned  " +
+                "FROM player " +
+                "WHERE id=?";
+
+        return jdbcTemplate.queryForObject(sql, new PlayerRowMapper(), id);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Data
 public abstract class AbstractSavePlayerDto {
@@ -12,6 +13,6 @@ public abstract class AbstractSavePlayerDto {
     private Race race;
     private Profession profession;
     private Integer experience;
-    private Date birthday;
+    private LocalDate birthday;
     private Boolean banned;
 }

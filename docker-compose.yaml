@@ -10,4 +10,7 @@ services:
       POSTGRES_DB: rpg
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: r42k368z
+      volumes:
+        -./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      -./da.sql:/docker-entrypoint-initdb.d/schema.sql
 
