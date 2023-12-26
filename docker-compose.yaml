@@ -4,10 +4,17 @@ services:
   db_postgres_15:
     image: 'postgres:15'
     container_name: 'rpg-postgres'
-    ports:
-      - 5432:5433
     environment:
       POSTGRES_DB: rpg
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: r42k368z
+      ports:
+        5432:5432
+
+  app:
+    build: ./
+    container_name: 'admin-rpg'
+    ports:
+      - 8080:8080
+
 
