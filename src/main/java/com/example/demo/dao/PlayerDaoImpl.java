@@ -77,7 +77,7 @@ public class PlayerDaoImpl implements PlayerDao{
                 "banned=?" +
                 "WHERE id=?";
         int updateLines = jdbcTemplate.update(sql, player.getName(), player.getTitle(), getRaceIdByName(player.getRace()),
-                getProfessionIdByName(player.getProfession()), player.getBirthday(), player.getBanned());
+                getProfessionIdByName(player.getProfession()), player.getBirthday(), player.getBanned(), player.getId());
         if (updateLines == 0) {
             throw new PlayerNotFoundException();
         }

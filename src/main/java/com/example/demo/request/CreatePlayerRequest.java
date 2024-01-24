@@ -11,7 +11,7 @@ public class CreatePlayerRequest {
     private String title;
     private Race race;
     private Profession profession;
-    private Integer experience;
     private LocalDate birthday;
     private Boolean banned;
+    private Integer experience;
 }

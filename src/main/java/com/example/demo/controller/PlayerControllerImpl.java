@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,6 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 @RestController
 @RequiredArgsConstructor
-@Validated
 public class PlayerControllerImpl implements PlayerController{
     private final PlayerService playerService;
 
@@ -33,7 +33,7 @@ public class PlayerControllerImpl implements PlayerController{
     }
     @PostMapping("rest/players/")
     @Override
-    public CreateObjectResponse createPlayer(CreatePlayerRequest createPlayerRequest) {
+    public CreateObjectResponse createPlayer(@RequestBody CreatePlayerRequest createPlayerRequest) {
         if (createPlayerRequest.getBanned() == null) {
             createPlayerRequest.setBanned(false);
         }
