@@ -9,7 +9,7 @@ import java.util.List;
 public interface PlayerService {
     List<Player> getAllPlayers();
     Player createPlayer(SavePlayerDto savePlayerDto);
-    void updatePlayer(UpdatePlayerDto updatePlayerDto);
+    Player updatePlayer(UpdatePlayerDto updatePlayerDto);
     void deletePlayer(long id);
     Player getPlayerById(long id);
 }

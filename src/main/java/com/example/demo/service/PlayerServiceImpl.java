@@ -30,13 +30,17 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updatePlayer(UpdatePlayerDto updatePlayerDto) {
+    public Player updatePlayer(UpdatePlayerDto updatePlayerDto) {
+        Player player = Converter.convertToPlayer(updatePlayerDto);
+        player.setLevel(calculateCurrentLevel(player.getExperience()));
+        player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
 
+        return playerDao.updatePlayer(player);
     }
 
     @Override
     public void deletePlayer(long id) {
-
+        playerDao.deletePlayer(id);
     }
 
     @Override

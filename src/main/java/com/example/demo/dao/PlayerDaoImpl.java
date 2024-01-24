@@ -3,6 +3,7 @@ package com.example.demo.dao;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
+import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.mappers.PlayerRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,37 +54,60 @@ public class PlayerDaoImpl implements PlayerDao{
         }};
         long id = simplePlayerJdbcInsert.executeAndReturnKey(map).longValue();
 
-        String sql = "SELECT id, name, title, race_id, profession_id, level, experience," +
-                "until_next_level, birthday, banned  " +
+        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name," +
+                "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
                 "FROM player " +
-                "WHERE id=?";
+                "JOIN race " +
+                "ON player.race_id = race.id " +
+                "JOIN profession " +
+                "ON player.profession_id = profession.id " +
+                "WHERE player.id=?";
 
         return jdbcTemplate.queryForObject(sql, new PlayerRowMapper(), id);
     }
 
     @Override
-    public void updatePlayer(Player player) {
-
+    public Player updatePlayer(Player player) {
+        String sql = "UPDATE player " +
+                "SET name=?," +
+                "title=?, " +
+                "race_id=?," +
+                "profession_id=?," +
+                "birthday=?," +
+                "banned=?" +
+                "WHERE id=?";
+        int updateLines = jdbcTemplate.update(sql, player.getName(), player.getTitle(), getRaceIdByName(player.getRace()),
+                getProfessionIdByName(player.getProfession()), player.getBirthday(), player.getBanned());
+        if (updateLines == 0) {
+            throw new PlayerNotFoundException();
+        }
+        return null;
     }
 
     @Override
     public void deletePlayer(long id) {
-
+        String sql = "DELETE from player " +
+                "WHERE id=?";
+        int removedLines = jdbcTemplate.update(sql, id);
+        if (removedLines == 0) {
+            throw new PlayerNotFoundException();
+        }
     }
 
     @Override
     public Player getPlayerById(long id) {
         String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name," +
                 "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
-                "FROM player" +
+                "FROM player " +
                 "JOIN race ON player.race_id = race.id " +
-                "JOIN profession ON player.profession_id = profession.id";
+                "JOIN profession ON player.profession_id = profession.id " +
+                "WHERE player.id=?";
 
         Player player = null;
         try {
             player = jdbcTemplate.queryForObject(sql, new PlayerRowMapper(), id);
         } catch (Exception e) {
-            log.info("Player with this id {} not found", id);
+            throw new PlayerNotFoundException();
         }
 
         return player;
