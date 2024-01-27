@@ -36,7 +36,12 @@ public class PlayerDaoImpl implements PlayerDao{
 
     @Override
     public List<Player> getAllPlayers() {
-        return null;
+        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name," +
+                "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
+                "FROM player " +
+                "JOIN race ON player.race_id = race.id " +
+                "JOIN profession ON player.profession_id = profession.id ";
+        return jdbcTemplate.query(sql, new PlayerRowMapper());
     }
 
     @Override
@@ -68,20 +73,19 @@ public class PlayerDaoImpl implements PlayerDao{
 
     @Override
     public Player updatePlayer(Player player) {
-        String sql = "UPDATE player " +
-                "SET name=?," +
-                "title=?, " +
-                "race_id=?," +
-                "profession_id=?," +
-                "birthday=?," +
-                "banned=?" +
-                "WHERE id=?";
-        int updateLines = jdbcTemplate.update(sql, player.getName(), player.getTitle(), getRaceIdByName(player.getRace()),
-                getProfessionIdByName(player.getProfession()), player.getBirthday(), player.getBanned(), player.getId());
-        if (updateLines == 0) {
-            throw new PlayerNotFoundException();
-        }
-        return null;
+        String sql = "UPDATE player SET name = ?," +
+                 "title = ?, " +
+                "race_id = ?," +
+                "profession_id = ?," +
+                "birthday = ?," +
+                "banned = ?," +
+                "experience = ?" +
+                "WHERE id = ?";
+        jdbcTemplate.update(sql, player.getName(), player.getTitle(), getRaceIdByName(player.getRace()),
+                getProfessionIdByName(player.getProfession()), player.getBirthday(), player.getBanned(),
+                player.getExperience(), player.getId());
+
+        return getPlayerById(player.getId());
     }
 
     @Override

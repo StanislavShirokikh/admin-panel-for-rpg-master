@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class PlayerControllerImpl implements PlayerController{
     @GetMapping("/rest/players/count")
     @Override
     public List<Player> getAllPlayers() {
-        return null;
+        return playerService.getAllPlayers();
     }
     @PostMapping("rest/players/")
     @Override
@@ -43,9 +44,9 @@ public class PlayerControllerImpl implements PlayerController{
         return Converter.convertToCreateObjectResponse(player);
     }
 
-    @PutMapping("rest/players/")
+    @PutMapping("rest/players/{id}")
     @Override
-    public UpdateObjectResponse updatePlayer(UpdatePlayerRequest updatePlayerRequest, @RequestParam @Positive long id) {
+    public UpdateObjectResponse updatePlayer(@PathVariable long id, @RequestBody UpdatePlayerRequest updatePlayerRequest) {
         UpdatePlayerDto updatePlayerDto = Converter.convertToUpdatePlayerDto(updatePlayerRequest);
         updatePlayerDto.setId(id);
         Player player = playerService.updatePlayer(updatePlayerDto);
@@ -54,7 +55,7 @@ public class PlayerControllerImpl implements PlayerController{
 
     @Override
     @DeleteMapping("/rest/players/")
-    public void deletePlayer(@RequestParam @Positive long id) {
+    public void deletePlayer(@RequestParam("id") @Positive long id) {
         playerService.deletePlayer(id);
     }
 

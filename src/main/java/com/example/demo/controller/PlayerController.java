@@ -12,7 +12,7 @@ import java.util.List;
 public interface PlayerController {
     List<Player> getAllPlayers();
     CreateObjectResponse createPlayer(CreatePlayerRequest createPlayerRequest);
-    UpdateObjectResponse updatePlayer(UpdatePlayerRequest updatePlayerRequest, long id);
+    UpdateObjectResponse updatePlayer(long id, UpdatePlayerRequest updatePlayerRequest);
     void deletePlayer(long id);
     Player getPlayerById(long id);
 }

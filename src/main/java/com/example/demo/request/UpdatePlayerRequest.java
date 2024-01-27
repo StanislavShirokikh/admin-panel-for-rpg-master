@@ -13,6 +13,6 @@ public class UpdatePlayerRequest {
     private Race race;
     private Profession profession;
     private LocalDate birthday;
-    private Integer experience;
     private Boolean banned;
+    private Integer experience;
 }

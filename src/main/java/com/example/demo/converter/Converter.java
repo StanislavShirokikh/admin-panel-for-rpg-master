@@ -23,6 +23,7 @@ public class Converter {
 
     public static Player convertToPlayer(UpdatePlayerDto updatePlayerDto) {
         Player player = new Player();
+        player.setId(updatePlayerDto.getId());
         player.setName(updatePlayerDto.getName());
         player.setTitle(updatePlayerDto.getTitle());
         player.setRace(updatePlayerDto.getRace());

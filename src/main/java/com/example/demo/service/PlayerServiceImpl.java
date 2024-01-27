@@ -17,7 +17,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final PlayerDao playerDao;
     @Override
     public List<Player> getAllPlayers() {
-        return null;
+        return playerDao.getAllPlayers();
     }
 
     @Override
