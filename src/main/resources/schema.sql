@@ -29,7 +29,7 @@ SELECT player.id, player.name, player.title, race.name race_name, profession.nam
                 FROM player
                 JOIN race ON player.race_id = race.id
                 JOIN profession ON player.profession_id = profession.id
-                WHERE player.id=2;
+                WHERE player.id=13;
 
 
 

@@ -13,9 +13,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 @Repository
 @Slf4j
@@ -73,17 +75,48 @@ public class PlayerDaoImpl implements PlayerDao{
 
     @Override
     public Player updatePlayer(Player player) {
-        String sql = "UPDATE player SET name = ?," +
-                 "title = ?, " +
-                "race_id = ?," +
-                "profession_id = ?," +
-                "birthday = ?," +
-                "banned = ?," +
-                "experience = ?" +
-                "WHERE id = ?";
-        jdbcTemplate.update(sql, player.getName(), player.getTitle(), getRaceIdByName(player.getRace()),
-                getProfessionIdByName(player.getProfession()), player.getBirthday(), player.getBanned(),
-                player.getExperience(), player.getId());
+        String sql = "UPDATE player SET ";
+
+        List<String> clauses = new ArrayList<>();
+        List<Object> values = new ArrayList<>();
+
+        clauses.add("name = ?");
+        values.add(player.getName());
+        if (player.getTitle() != null) {
+            clauses.add("title = ?");
+            values.add(player.getTitle());
+        }
+        if (player.getRace() != null) {
+            clauses.add("race_id = (SELECT id FROM race WHERE name = ?)");
+            values.add(player.getRace().name());
+        }
+        if (player.getProfession() != null) {
+            clauses.add("profession_id = (SELECT id FROM profession WHERE name = ?)");
+            values.add(player.getProfession().name());
+        }
+        if (player.getBirthday() != null) {
+            clauses.add("birthday = ?");
+            values.add(player.getBirthday());
+        }
+
+        if (player.getBanned() != null) {
+            clauses.add("banned = ?");
+            values.add(player.getBanned());
+        }
+        if (player.getExperience() != null) {
+            clauses.add("experience = ?");
+            values.add(player.getExperience());
+        }
+
+        StringJoiner joiner = new StringJoiner(", ");
+        clauses.forEach(joiner::add);
+
+        sql += joiner.toString();
+        sql += " WHERE id = ?";
+
+        values.add(player.getId());
+        log.debug("Запрос на обновление: {}", sql);
+        jdbcTemplate.update(sql, values.toArray());
 
         return getPlayerById(player.getId());
     }
@@ -111,6 +144,7 @@ public class PlayerDaoImpl implements PlayerDao{
         try {
             player = jdbcTemplate.queryForObject(sql, new PlayerRowMapper(), id);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new PlayerNotFoundException();
         }
 
