@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class Player {
@@ -14,6 +15,6 @@ public class Player {
     private Integer level;
     private Integer experience;
     private Integer untilNextLevel;
-    private LocalDate birthday;
+    private LocalDateTime birthday;
     private Boolean banned;
 }

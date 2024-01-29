@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 public interface PlayerController {
@@ -29,5 +27,5 @@ public interface PlayerController {
     void deletePlayer(@PathVariable long id);
 
     @GetMapping("/rest/players/{id}")
-    Player getPlayerById(@PathVariable long id);
+    PlayerResponse getPlayerById(@PathVariable long id);
 }

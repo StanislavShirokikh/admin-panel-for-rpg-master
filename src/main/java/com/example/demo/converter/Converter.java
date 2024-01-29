@@ -5,6 +5,10 @@ import com.example.demo.entity.Player;
 import com.example.demo.request.PlayerRequest;
 import com.example.demo.response.PlayerResponse;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 public class Converter {
     public static Player convertToPlayer(PlayerDto playerDto) {
         Player player = new Player();
@@ -37,7 +41,7 @@ public class Converter {
 
         return playerDto;
     }
-    public static PlayerResponse convertToPlayerResponseObject(Player player) {
+    public static PlayerResponse convertToPlayerResponse(Player player) {
         PlayerResponse playerResponse = new PlayerResponse();
         playerResponse.setId(player.getId());
         playerResponse.setName(player.getName());
@@ -47,8 +51,14 @@ public class Converter {
         playerResponse.setLevel(player.getLevel());
         playerResponse.setExperience(player.getExperience());
         playerResponse.setUntilNextLevel(player.getUntilNextLevel());
-        playerResponse.setBirthday(player.getBirthday());
+        playerResponse.setBirthday(convertLocalDateTimeToLong(player.getBirthday()));
         playerResponse.setBanned(player.getBanned());
         return playerResponse;
+    }
+
+    private static long convertLocalDateTimeToLong(LocalDateTime localDateTime) {
+        return ZonedDateTime.of(localDateTime, ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
     }
 }

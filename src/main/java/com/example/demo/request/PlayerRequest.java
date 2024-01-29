@@ -8,14 +8,23 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 public class PlayerRequest {
-
+    @NotEmpty
+    @Size(min = 1, max = 12)
     private String name;
+    @NotEmpty
+    @Size(min = 1, max = 30)
     private String title;
+    @NotNull
     private Race race;
+    @NotNull
     private Profession profession;
-    private LocalDate birthday;
+    @NotNull
+
+    private LocalDateTime birthday;
     private Boolean banned;
     private Integer experience;
 }
