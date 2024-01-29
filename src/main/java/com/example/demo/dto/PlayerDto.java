@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Data
 public class PlayerDto {
+    private Long id;
     private String name;
     private String title;
     private Race race;

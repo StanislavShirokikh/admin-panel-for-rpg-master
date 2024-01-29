@@ -74,7 +74,7 @@ public class PlayerDaoImpl implements PlayerDao{
     }
 
     @Override
-    public Player updatePlayer(Player player, long id) {
+    public Player updatePlayer(Player player) {
         String sql = "UPDATE player SET ";
 
         List<String> clauses = new ArrayList<>();
@@ -114,7 +114,7 @@ public class PlayerDaoImpl implements PlayerDao{
         sql += joiner.toString();
         sql += " WHERE id = ?";
 
-        values.add(id);
+        values.add(player.getId());
         log.debug("Запрос на обновление: {}", sql);
         jdbcTemplate.update(sql, values.toArray());
 

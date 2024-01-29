@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class PlayerResponseObject {
+public class PlayerResponse {
     private Long id;
     private String name;
     private String title;

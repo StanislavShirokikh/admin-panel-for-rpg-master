@@ -19,12 +19,4 @@ public class PlayerExceptionHandler {
         log.error(errorMessageResponse.getMessage());
         return new ResponseEntity<>(errorMessageResponse, HttpStatus.NOT_FOUND);
     }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMessageResponse> catchValidationException() {
-        ErrorMessageResponse errorMessageResponse = new ErrorMessageResponse();
-        errorMessageResponse.setMessage("Not valid");
-        log.error(errorMessageResponse.getMessage());
-        return new ResponseEntity<>(errorMessageResponse, HttpStatus.BAD_REQUEST);
-    }
 }

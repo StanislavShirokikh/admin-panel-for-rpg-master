@@ -8,7 +8,7 @@ import java.util.List;
 public interface PlayerService {
     List<Player> getAllPlayers();
     Player createPlayer(PlayerDto playerDto);
-    Player updatePlayer(PlayerDto playerDto, long id);
+    Player updatePlayer(PlayerDto playerDto);
     void deletePlayer(long id);
     Player getPlayerById(long id);
 }

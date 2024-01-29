@@ -2,12 +2,13 @@ package com.example.demo.converter;
 
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
-import com.example.demo.request.PlayerRequestObject;
-import com.example.demo.response.PlayerResponseObject;
+import com.example.demo.request.PlayerRequest;
+import com.example.demo.response.PlayerResponse;
 
 public class Converter {
     public static Player convertToPlayer(PlayerDto playerDto) {
         Player player = new Player();
+        player.setId(playerDto.getId());
         player.setName(playerDto.getName());
         player.setTitle(playerDto.getTitle());
         player.setRace(playerDto.getRace());
@@ -17,30 +18,37 @@ public class Converter {
         player.setBanned(playerDto.getBanned());
         return player;
     }
-    public static PlayerDto convertToPlayerDto(PlayerRequestObject playerRequestObject) {
-        PlayerDto playerDto = new PlayerDto();
-        playerDto.setName(playerRequestObject.getName());
-        playerDto.setTitle(playerRequestObject.getTitle());
-        playerDto.setRace(playerRequestObject.getRace());
-        playerDto.setProfession(playerRequestObject.getProfession());
-        playerDto.setBirthday(playerRequestObject.getBirthday());
-        playerDto.setExperience(playerRequestObject.getExperience());
-        playerDto.setBanned(playerRequestObject.getBanned());
+    public static PlayerDto convertToPlayerDto(PlayerRequest playerRequest, long id) {
+        PlayerDto playerDto = convertToPlayerDto(playerRequest);
+        playerDto.setId(id);
 
         return playerDto;
     }
-    public static PlayerResponseObject convertToPlayerResponseObject(Player player) {
-        PlayerResponseObject playerResponseObject = new PlayerResponseObject();
-        playerResponseObject.setId(player.getId());
-        playerResponseObject.setName(player.getName());
-        playerResponseObject.setTitle(player.getTitle());
-        playerResponseObject.setRace(player.getRace());
-        playerResponseObject.setProfession(player.getProfession());
-        playerResponseObject.setLevel(player.getLevel());
-        playerResponseObject.setExperience(player.getExperience());
-        playerResponseObject.setUntilNextLevel(player.getUntilNextLevel());
-        playerResponseObject.setBirthday(player.getBirthday());
-        playerResponseObject.setBanned(player.getBanned());
-        return playerResponseObject;
+
+    public static PlayerDto convertToPlayerDto(PlayerRequest playerRequest) {
+        PlayerDto playerDto = new PlayerDto();
+        playerDto.setName(playerRequest.getName());
+        playerDto.setTitle(playerRequest.getTitle());
+        playerDto.setRace(playerRequest.getRace());
+        playerDto.setProfession(playerRequest.getProfession());
+        playerDto.setBirthday(playerRequest.getBirthday());
+        playerDto.setExperience(playerRequest.getExperience());
+        playerDto.setBanned(playerRequest.getBanned());
+
+        return playerDto;
+    }
+    public static PlayerResponse convertToPlayerResponseObject(Player player) {
+        PlayerResponse playerResponse = new PlayerResponse();
+        playerResponse.setId(player.getId());
+        playerResponse.setName(player.getName());
+        playerResponse.setTitle(player.getTitle());
+        playerResponse.setRace(player.getRace());
+        playerResponse.setProfession(player.getProfession());
+        playerResponse.setLevel(player.getLevel());
+        playerResponse.setExperience(player.getExperience());
+        playerResponse.setUntilNextLevel(player.getUntilNextLevel());
+        playerResponse.setBirthday(player.getBirthday());
+        playerResponse.setBanned(player.getBanned());
+        return playerResponse;
     }
 }
