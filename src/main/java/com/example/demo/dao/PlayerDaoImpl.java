@@ -4,7 +4,7 @@ import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import com.example.demo.exceptions.PlayerNotFoundException;
-import com.example.demo.mappers.PlayerRowMapper;
+import com.example.demo.dao.mappers.PlayerRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class PlayerDaoImpl implements PlayerDao{
     }
 
     @Override
-    public Player updatePlayer(Player player) {
+    public Player updatePlayer(Player player, long id) {
         String sql = "UPDATE player SET ";
 
         List<String> clauses = new ArrayList<>();
@@ -114,7 +114,7 @@ public class PlayerDaoImpl implements PlayerDao{
         sql += joiner.toString();
         sql += " WHERE id = ?";
 
-        values.add(player.getId());
+        values.add(id);
         log.debug("Запрос на обновление: {}", sql);
         jdbcTemplate.update(sql, values.toArray());
 

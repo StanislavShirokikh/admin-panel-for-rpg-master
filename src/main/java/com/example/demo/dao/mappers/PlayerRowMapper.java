@@ -1,4 +1,4 @@
-package com.example.demo.mappers;
+package com.example.demo.dao.mappers;
 
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;

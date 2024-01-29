@@ -2,8 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.converter.Converter;
 import com.example.demo.dao.PlayerDao;
-import com.example.demo.dto.SavePlayerDto;
-import com.example.demo.dto.UpdatePlayerDto;
+import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +20,8 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player createPlayer(SavePlayerDto savePlayerDto) {
-        Player player = Converter.convertToPlayer(savePlayerDto);
+    public Player createPlayer(PlayerDto playerDto) {
+        Player player = Converter.convertToPlayer(playerDto);
         player.setLevel(calculateCurrentLevel(player.getExperience()));
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
 
@@ -30,12 +29,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player updatePlayer(UpdatePlayerDto updatePlayerDto) {
-        Player player = Converter.convertToPlayer(updatePlayerDto);
+    public Player updatePlayer(PlayerDto playerDto, long id) {
+        Player player = Converter.convertToPlayer(playerDto);
         player.setLevel(calculateCurrentLevel(player.getExperience()));
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
 
-        return playerDao.updatePlayer(player);
+        return playerDao.updatePlayer(player, id);
     }
 
     @Override

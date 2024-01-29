@@ -5,9 +5,9 @@ import com.example.demo.entity.Race;
 import lombok.Data;
 
 import java.time.LocalDate;
+
 @Data
-public class UpdatePlayerDto  {
-    private Long id;
+public class PlayerDto {
     private String name;
     private String title;
     private Race race;

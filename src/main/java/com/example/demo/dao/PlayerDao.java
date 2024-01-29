@@ -7,7 +7,7 @@ import java.util.List;
 public interface PlayerDao {
     List<Player> getAllPlayers();
     Player createPlayer(Player player);
-    Player updatePlayer(Player player);
+    Player updatePlayer(Player player, long id);
     void deletePlayer(long id);
     Player getPlayerById(long id);
 
