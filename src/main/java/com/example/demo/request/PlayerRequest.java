@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 public class PlayerRequest {
@@ -24,7 +25,7 @@ public class PlayerRequest {
     private Profession profession;
     @NotNull
 
-    private LocalDateTime birthday;
+    private Long birthday;
     private Boolean banned;
     private Integer experience;
 }

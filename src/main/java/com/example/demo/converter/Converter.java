@@ -5,9 +5,13 @@ import com.example.demo.entity.Player;
 import com.example.demo.request.PlayerRequest;
 import com.example.demo.response.PlayerResponse;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 public class Converter {
     public static Player convertToPlayer(PlayerDto playerDto) {
@@ -35,7 +39,7 @@ public class Converter {
         playerDto.setTitle(playerRequest.getTitle());
         playerDto.setRace(playerRequest.getRace());
         playerDto.setProfession(playerRequest.getProfession());
-        playerDto.setBirthday(playerRequest.getBirthday());
+        playerDto.setBirthday(convertLongToLocalDateTime(playerRequest.getBirthday()));
         playerDto.setExperience(playerRequest.getExperience());
         playerDto.setBanned(playerRequest.getBanned());
 
@@ -57,8 +61,11 @@ public class Converter {
     }
 
     private static long convertLocalDateTimeToLong(LocalDateTime localDateTime) {
-        return ZonedDateTime.of(localDateTime, ZoneId.systemDefault())
-                .toInstant()
-                .toEpochMilli();
+        return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+    }
+
+    private static LocalDateTime convertLongToLocalDateTime(long time) {
+        Instant instant = Instant.ofEpochMilli(time);
+        return LocalDateTime.ofInstant(instant, ZoneId.of("UTC"));
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class PlayerDaoImpl implements PlayerDao{
             put("level", player.getLevel());
             put("experience", player.getExperience());
             put("until_next_level", player.getUntilNextLevel());
-            put("birthday", player.getBirthday());
+            put("birthday", Date.valueOf(player.getBirthday().toLocalDate()));
             put("banned", player.getBanned());
         }};
         long id = simplePlayerJdbcInsert.executeAndReturnKey(map).longValue();

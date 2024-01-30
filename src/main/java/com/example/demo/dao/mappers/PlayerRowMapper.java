@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -30,8 +31,6 @@ public class PlayerRowMapper implements RowMapper<Player> {
     }
 
     private LocalDateTime convertDate(Date date) {
-        return date.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+        return new Timestamp(date.getTime()).toLocalDateTime();
     }
 }
