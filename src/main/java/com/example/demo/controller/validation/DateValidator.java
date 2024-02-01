@@ -29,12 +29,12 @@ public class DateValidator implements ConstraintValidator<Date, java.util.Date> 
         }
         java.util.Date beforeDate;
         try {
-            beforeDate = format.parse(this.after);
+            beforeDate = format.parse(this.before);
         } catch (ParseException e) {
             log.error("В аннотации Date внесена некорректно заданная дата before {}", before);
             throw new IllegalStateException(e);
         }
 
-        return !date.after(afterDate) && !date.before(beforeDate);
+        return date.after(afterDate) && date.before(beforeDate);
     }
 }
