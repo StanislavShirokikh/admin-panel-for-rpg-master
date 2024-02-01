@@ -5,12 +5,8 @@ import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 public class PlayerRowMapper implements RowMapper<Player> {
 
@@ -25,12 +21,8 @@ public class PlayerRowMapper implements RowMapper<Player> {
         player.setLevel(rs.getInt("level"));
         player.setExperience(rs.getInt("experience"));
         player.setUntilNextLevel(rs.getInt("until_next_level"));
-        player.setBirthday(convertDate(rs.getDate("birthday")));
+        player.setBirthday(rs.getDate("birthday"));
         player.setBanned(rs.getBoolean("banned"));
         return player;
-    }
-
-    private LocalDateTime convertDate(Date date) {
-        return new Timestamp(date.getTime()).toLocalDateTime();
     }
 }

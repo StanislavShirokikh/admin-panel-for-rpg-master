@@ -5,14 +5,6 @@ import com.example.demo.entity.Player;
 import com.example.demo.request.PlayerRequest;
 import com.example.demo.response.PlayerResponse;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
-
 public class Converter {
     public static Player convertToPlayer(PlayerDto playerDto) {
         Player player = new Player();
@@ -39,7 +31,7 @@ public class Converter {
         playerDto.setTitle(playerRequest.getTitle());
         playerDto.setRace(playerRequest.getRace());
         playerDto.setProfession(playerRequest.getProfession());
-        playerDto.setBirthday(convertLongToLocalDateTime(playerRequest.getBirthday()));
+        playerDto.setBirthday(playerRequest.getBirthday());
         playerDto.setExperience(playerRequest.getExperience());
         playerDto.setBanned(playerRequest.getBanned());
 
@@ -55,17 +47,8 @@ public class Converter {
         playerResponse.setLevel(player.getLevel());
         playerResponse.setExperience(player.getExperience());
         playerResponse.setUntilNextLevel(player.getUntilNextLevel());
-        playerResponse.setBirthday(convertLocalDateTimeToLong(player.getBirthday()));
+        playerResponse.setBirthday(player.getBirthday().getTime());
         playerResponse.setBanned(player.getBanned());
         return playerResponse;
-    }
-
-    private static long convertLocalDateTimeToLong(LocalDateTime localDateTime) {
-        return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
-    }
-
-    private static LocalDateTime convertLongToLocalDateTime(long time) {
-        Instant instant = Instant.ofEpochMilli(time);
-        return LocalDateTime.ofInstant(instant, ZoneId.of("UTC"));
     }
 }

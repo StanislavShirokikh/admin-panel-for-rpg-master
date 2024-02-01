@@ -7,7 +7,6 @@ import com.example.demo.request.PlayerRequest;
 import com.example.demo.response.PlayerResponse;
 import com.example.demo.service.PlayerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Validated
 public class PlayerControllerImpl implements PlayerController{
     private final PlayerService playerService;
 

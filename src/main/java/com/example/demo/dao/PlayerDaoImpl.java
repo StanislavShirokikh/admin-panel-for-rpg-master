@@ -1,10 +1,10 @@
 package com.example.demo.dao;
 
+import com.example.demo.dao.mappers.PlayerRowMapper;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import com.example.demo.exceptions.PlayerNotFoundException;
-import com.example.demo.dao.mappers.PlayerRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +56,7 @@ public class PlayerDaoImpl implements PlayerDao{
             put("level", player.getLevel());
             put("experience", player.getExperience());
             put("until_next_level", player.getUntilNextLevel());
-            put("birthday", Date.valueOf(player.getBirthday().toLocalDate()));
+            put("birthday", player.getBirthday());
             put("banned", player.getBanned());
         }};
         long id = simplePlayerJdbcInsert.executeAndReturnKey(map).longValue();

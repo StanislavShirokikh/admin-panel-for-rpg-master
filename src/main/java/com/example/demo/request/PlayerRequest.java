@@ -9,6 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Data
 public class PlayerRequest {
@@ -23,9 +24,8 @@ public class PlayerRequest {
     @NotNull
     private Profession profession;
     @NotNull
-    @Min(946684800000L)
-    @Max(325036800_000_000L)
-    private Long birthday;
+    @com.example.demo.controller.validation.Date(after = "2000.01.01", before = "3000.12.31")
+    private Date birthday;
     @NotNull
     private Boolean banned = false;
     @NotNull

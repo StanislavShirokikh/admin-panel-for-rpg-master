@@ -4,8 +4,7 @@ import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 public class PlayerDto {
@@ -15,6 +14,6 @@ public class PlayerDto {
     private Race race;
     private Profession profession;
     private Integer experience;
-    private LocalDateTime birthday;
+    private Date birthday;
     private Boolean banned;
 }
