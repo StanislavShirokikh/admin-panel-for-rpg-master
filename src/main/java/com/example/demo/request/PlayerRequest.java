@@ -4,12 +4,11 @@ import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import lombok.Data;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 @Data
 public class PlayerRequest {
@@ -24,8 +23,13 @@ public class PlayerRequest {
     @NotNull
     private Profession profession;
     @NotNull
-
+    @Min(946684800000L)
+    @Max(325036800_000_000L)
     private Long birthday;
-    private Boolean banned;
+    @NotNull
+    private Boolean banned = false;
+    @NotNull
+    @Min(0)
+    @Max(1000000)
     private Integer experience;
 }
