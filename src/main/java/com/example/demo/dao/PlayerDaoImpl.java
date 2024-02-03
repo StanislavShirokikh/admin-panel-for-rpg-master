@@ -1,10 +1,10 @@
 package com.example.demo.dao;
 
+import com.example.demo.dao.mappers.PlayerRowMapper;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import com.example.demo.exceptions.PlayerNotFoundException;
-import com.example.demo.dao.mappers.PlayerRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

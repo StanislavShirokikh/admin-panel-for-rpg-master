@@ -37,7 +37,7 @@ public class Converter {
 
         return playerDto;
     }
-    public static PlayerResponse convertToPlayerResponseObject(Player player) {
+    public static PlayerResponse convertToPlayerResponse(Player player) {
         PlayerResponse playerResponse = new PlayerResponse();
         playerResponse.setId(player.getId());
         playerResponse.setName(player.getName());
@@ -47,7 +47,7 @@ public class Converter {
         playerResponse.setLevel(player.getLevel());
         playerResponse.setExperience(player.getExperience());
         playerResponse.setUntilNextLevel(player.getUntilNextLevel());
-        playerResponse.setBirthday(player.getBirthday());
+        playerResponse.setBirthday(player.getBirthday().getTime());
         playerResponse.setBanned(player.getBanned());
         return playerResponse;
     }

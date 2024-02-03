@@ -21,7 +21,7 @@ public class PlayerRowMapper implements RowMapper<Player> {
         player.setLevel(rs.getInt("level"));
         player.setExperience(rs.getInt("experience"));
         player.setUntilNextLevel(rs.getInt("until_next_level"));
-        player.setBirthday(rs.getDate("birthday").toLocalDate());
+        player.setBirthday(rs.getDate("birthday"));
         player.setBanned(rs.getBoolean("banned"));
         return player;
     }

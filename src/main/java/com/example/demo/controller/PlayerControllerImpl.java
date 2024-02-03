@@ -27,14 +27,14 @@ public class PlayerControllerImpl implements PlayerController{
         PlayerDto playerDto = Converter.convertToPlayerDto(playerRequest);
         Player player = playerService.createPlayer(playerDto);
 
-        return Converter.convertToPlayerResponseObject(player);
+        return Converter.convertToPlayerResponse(player);
     }
 
     @Override
     public PlayerResponse updatePlayer(long id, PlayerRequest playerRequest) {
         PlayerDto playerDto = Converter.convertToPlayerDto(playerRequest, id);
         Player player = playerService.updatePlayer(playerDto);
-        return Converter.convertToPlayerResponseObject(player);
+        return Converter.convertToPlayerResponse(player);
     }
 
     @Override
@@ -43,7 +43,8 @@ public class PlayerControllerImpl implements PlayerController{
     }
 
     @Override
-    public Player getPlayerById(long id) {
-        return playerService.getPlayerById(id);
+    public PlayerResponse getPlayerById(long id) {
+        Player player = playerService.getPlayerById(id);
+        return Converter.convertToPlayerResponse(player);
     }
 }
