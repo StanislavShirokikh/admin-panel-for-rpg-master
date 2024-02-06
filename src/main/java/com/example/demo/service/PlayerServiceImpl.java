@@ -4,6 +4,7 @@ import com.example.demo.converter.Converter;
 import com.example.demo.dao.PlayerDao;
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
+import com.example.demo.filter.Filter;
 import com.example.demo.response.PlayerResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,11 @@ public class PlayerServiceImpl implements PlayerService {
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
 
         return playerDao.createPlayer(player);
+    }
+
+    @Override
+    public List<Player> getPlayersByFilter(Filter filter) {
+        return playerDao.getPlayersByFilter(filter);
     }
 
     @Override

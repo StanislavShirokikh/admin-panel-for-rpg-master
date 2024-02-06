@@ -5,11 +5,12 @@ import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import com.example.demo.exceptions.PlayerNotFoundException;
-import lombok.RequiredArgsConstructor;
+import com.example.demo.filter.Filter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -22,18 +23,18 @@ import java.util.StringJoiner;
 @Repository
 @Slf4j
 @ConditionalOnProperty(name = "app.storage.type", havingValue = "DATABASE")
-@RequiredArgsConstructor
 public class PlayerDaoImpl implements PlayerDao{
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simplePlayerJdbcInsert;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Autowired
     public PlayerDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.simplePlayerJdbcInsert = new SimpleJdbcInsert(jdbcTemplate){{
             withTableName("player");
             usingGeneratedKeyColumns("id");
         }};
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
     }
 
     @Override
@@ -44,6 +45,86 @@ public class PlayerDaoImpl implements PlayerDao{
                 "JOIN race ON player.race_id = race.id " +
                 "JOIN profession ON player.profession_id = profession.id ";
         return jdbcTemplate.query(sql, new PlayerRowMapper());
+    }
+
+    @Override
+    public List<Player> getPlayersByFilter(Filter filter) {
+        List<String> queryConditions = new ArrayList<>();
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        if (filter.getName() != null) {
+            queryConditions.add("player.name LIKE :name");
+            params.addValue("name", "'%" + filter.getName() + "%'");
+        }
+        if (filter.getTitle() != null) {
+            queryConditions.add("player.title LIKE :title");
+            params.addValue("title", "'%" + filter.getTitle() + "%'");
+        }
+        if (filter.getRace() != null) {
+            queryConditions.add("race_name = :race_name ");
+            params.addValue("race_name", String.valueOf(filter.getRace()));
+        }
+        if (filter.getProfession() != null) {
+            queryConditions.add("profession.name = :profession_name");
+            params.addValue("profession_name", String.valueOf(filter.getProfession()));
+        }
+        if (filter.getAfter() != null) {
+            queryConditions.add("player.birthday > :birthday");
+            params.addValue("birthday", filter.getAfter());
+        }
+        if (filter.getBefore() != null) {
+            queryConditions.add("player.birthday < :birthday");
+            params.addValue("birthday", filter.getBefore());
+        }
+        if (filter.getBanned() != null) {
+            queryConditions.add("player.banned = :banned");
+            params.addValue("banned", filter.getBanned());
+        }
+        if (filter.getMinExperience() != null) {
+            queryConditions.add("player.experience > :experience");
+            params.addValue("experience", filter.getMinExperience());
+        }
+        if (filter.getMaxExperience() != null) {
+            queryConditions.add("player.experience < :experience");
+            params.addValue("experience", filter.getMaxExperience());
+        }
+        if (filter.getMinLevel() != null) {
+            queryConditions.add("player.level > :level");
+            params.addValue("level", filter.getMinLevel());
+        }
+        if (filter.getMaxLevel() != null) {
+            queryConditions.add("player.level < :level");
+            params.addValue("level", filter.getMaxLevel());
+        }
+        String condition = queryConditions.get(0);
+        if (queryConditions.size() != 1) {
+            condition = String.join(" and ");
+        }
+
+        List<String> paginationParams = new ArrayList<>();
+        if (filter.getOrder() != null) {
+           paginationParams.add(" ORDER BY :order");
+           params.addValue("order", "player." + filter.getOrder().getFieldName() + " ASC");
+        }
+        if (filter.getPageNumber() != null && filter.getPageSize() != null) {
+            paginationParams.add( "LIMIT :limit");
+            params.addValue("limit", filter.getPageSize());
+            paginationParams.add("OFFSET :offset");
+            params.addValue("offset", filter.getPageNumber());
+        }
+
+        String option = String.join(" ", paginationParams);
+
+        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name, " +
+                "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
+                "FROM player " +
+                "JOIN race " +
+                "ON player.race_id = race.id " +
+                "JOIN profession " +
+                "ON player.profession_id = profession.id " +
+                "WHERE " + condition + option;
+
+        return namedParameterJdbcTemplate.query(sql, params, new PlayerRowMapper());
     }
 
     @Override
