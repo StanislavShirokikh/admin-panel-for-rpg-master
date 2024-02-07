@@ -38,93 +38,15 @@ public class PlayerDaoImpl implements PlayerDao{
     }
 
     @Override
-    public List<Player> getAllPlayers() {
-        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name," +
-                "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
-                "FROM player " +
-                "JOIN race ON player.race_id = race.id " +
-                "JOIN profession ON player.profession_id = profession.id ";
-        return jdbcTemplate.query(sql, new PlayerRowMapper());
+    public Integer getPlayersCountByFilter(Filter filter) {
+        List<Player> players = getPlayersListWithSqlOption(filter);
+
+        return players.size();
     }
 
     @Override
     public List<Player> getPlayersByFilter(Filter filter) {
-        List<String> queryConditions = new ArrayList<>();
-        MapSqlParameterSource params = new MapSqlParameterSource();
-
-        if (filter.getName() != null) {
-            queryConditions.add("player.name LIKE :name");
-            params.addValue("name", "'%" + filter.getName() + "%'");
-        }
-        if (filter.getTitle() != null) {
-            queryConditions.add("player.title LIKE :title");
-            params.addValue("title", "'%" + filter.getTitle() + "%'");
-        }
-        if (filter.getRace() != null) {
-            queryConditions.add("race_name = :race_name ");
-            params.addValue("race_name", String.valueOf(filter.getRace()));
-        }
-        if (filter.getProfession() != null) {
-            queryConditions.add("profession.name = :profession_name");
-            params.addValue("profession_name", String.valueOf(filter.getProfession()));
-        }
-        if (filter.getAfter() != null) {
-            queryConditions.add("player.birthday > :birthday");
-            params.addValue("birthday", filter.getAfter());
-        }
-        if (filter.getBefore() != null) {
-            queryConditions.add("player.birthday < :birthday");
-            params.addValue("birthday", filter.getBefore());
-        }
-        if (filter.getBanned() != null) {
-            queryConditions.add("player.banned = :banned");
-            params.addValue("banned", filter.getBanned());
-        }
-        if (filter.getMinExperience() != null) {
-            queryConditions.add("player.experience > :experience");
-            params.addValue("experience", filter.getMinExperience());
-        }
-        if (filter.getMaxExperience() != null) {
-            queryConditions.add("player.experience < :experience");
-            params.addValue("experience", filter.getMaxExperience());
-        }
-        if (filter.getMinLevel() != null) {
-            queryConditions.add("player.level > :level");
-            params.addValue("level", filter.getMinLevel());
-        }
-        if (filter.getMaxLevel() != null) {
-            queryConditions.add("player.level < :level");
-            params.addValue("level", filter.getMaxLevel());
-        }
-        String condition = queryConditions.get(0);
-        if (queryConditions.size() != 1) {
-            condition = String.join(" and ");
-        }
-
-        List<String> paginationParams = new ArrayList<>();
-        if (filter.getOrder() != null) {
-           paginationParams.add(" ORDER BY :order");
-           params.addValue("order", "player." + filter.getOrder().getFieldName() + " ASC");
-        }
-        if (filter.getPageNumber() != null && filter.getPageSize() != null) {
-            paginationParams.add( "LIMIT :limit");
-            params.addValue("limit", filter.getPageSize());
-            paginationParams.add("OFFSET :offset");
-            params.addValue("offset", filter.getPageNumber());
-        }
-
-        String option = String.join(" ", paginationParams);
-
-        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name, " +
-                "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
-                "FROM player " +
-                "JOIN race " +
-                "ON player.race_id = race.id " +
-                "JOIN profession " +
-                "ON player.profession_id = profession.id " +
-                "WHERE " + condition + option;
-
-        return namedParameterJdbcTemplate.query(sql, params, new PlayerRowMapper());
+        return getPlayersListWithSqlOption(filter);
     }
 
     @Override
@@ -240,5 +162,87 @@ public class PlayerDaoImpl implements PlayerDao{
     private Integer getProfessionIdByName(Profession profession) {
         String sql2 = "SELECT id FROM profession WHERE name=?";
         return jdbcTemplate.queryForObject(sql2, Integer.class, String.valueOf(profession));
+    }
+
+    private List<Player> getPlayersListWithSqlOption(Filter filter) {
+        List<String> queryConditions = new ArrayList<>();
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        if (filter.getName() != null) {
+            queryConditions.add("player.name LIKE :name");
+            params.addValue("name", "%" + filter.getName() + "%");
+        }
+        if (filter.getTitle() != null) {
+            queryConditions.add("player.title LIKE :title");
+            params.addValue("title", "%" + filter.getTitle() + "%");
+        }
+        if (filter.getRace() != null) {
+            queryConditions.add("race.name = :race_name ");
+            params.addValue("race_name", String.valueOf(filter.getRace()));
+        }
+        if (filter.getProfession() != null) {
+            queryConditions.add("profession.name = :profession_name");
+            params.addValue("profession_name", String.valueOf(filter.getProfession()));
+        }
+        if (filter.getAfter() != null) {
+            queryConditions.add("player.birthday > :birthday");
+            params.addValue("birthday", filter.getAfter());
+        }
+        if (filter.getBefore() != null) {
+            queryConditions.add("player.birthday < :birthday");
+            params.addValue("birthday", filter.getBefore());
+        }
+        if (filter.getBanned() != null) {
+            queryConditions.add("player.banned = :banned");
+            params.addValue("banned", filter.getBanned());
+        }
+        if (filter.getMinExperience() != null) {
+            queryConditions.add("player.experience > :experience");
+            params.addValue("experience", filter.getMinExperience());
+        }
+        if (filter.getMaxExperience() != null) {
+            queryConditions.add("player.experience < :experience");
+            params.addValue("experience", filter.getMaxExperience());
+        }
+        if (filter.getMinLevel() != null) {
+            queryConditions.add("player.level > :level");
+            params.addValue("level", filter.getMinLevel());
+        }
+        if (filter.getMaxLevel() != null) {
+            queryConditions.add("player.level < :level");
+            params.addValue("level", filter.getMaxLevel());
+        }
+
+        String sqlCondition = "";
+        if (queryConditions.size() > 1) {
+            sqlCondition = "WHERE " + String.join(" AND ", queryConditions);
+        } if (queryConditions.size() == 1) {
+            sqlCondition = "WHERE " + queryConditions.get(0);
+        }
+
+        List<String> paginationParams = new ArrayList<>();
+        if (filter.getOrder() != null) {
+            paginationParams.add(" ORDER BY :order");
+            params.addValue("order", "player." + filter.getOrder().getFieldName());
+        }
+        if (filter.getPageNumber() != null && filter.getPageSize() != null) {
+            paginationParams.add( "LIMIT :limit");
+            params.addValue("limit", filter.getPageSize());
+            paginationParams.add("OFFSET :offset");
+            params.addValue("offset", filter.getPageNumber());
+        }
+        String sqlOption = "";
+        if (!paginationParams.isEmpty()) {
+            sqlOption = String.join(" ", paginationParams);
+        }
+        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name, " +
+                "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
+                "FROM player " +
+                "JOIN race " +
+                "ON player.race_id = race.id " +
+                "JOIN profession " +
+                "ON player.profession_id = profession.id " +
+                sqlCondition + sqlOption;
+        return namedParameterJdbcTemplate.query(sql, params, new PlayerRowMapper());
     }
 }

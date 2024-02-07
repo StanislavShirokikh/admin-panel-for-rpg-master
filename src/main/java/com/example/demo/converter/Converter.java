@@ -72,6 +72,17 @@ public class Converter {
     public static Filter convertToFilter(String name, String title, Race race, Profession profession, Date after,
                                          Date before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel,
                                          Integer maxLevel, PlayerOrder order, Integer pageNumber, Integer pageSize) {
+        Filter filter = convertToFilter(name, title, race, profession, after, before, banned, minExperience, maxExperience,
+                minLevel, maxLevel);
+        filter.setOrder(order);
+        filter.setPageNumber(pageNumber);
+        filter.setPageSize(pageSize);
+        return filter;
+    }
+
+    public static Filter convertToFilter(String name, String title, Race race, Profession profession, Date after,
+                                         Date before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel,
+                                         Integer maxLevel) {
         Filter filter = new Filter();
         filter.setName(name);
         filter.setTitle(title);
@@ -84,9 +95,6 @@ public class Converter {
         filter.setMaxExperience(maxExperience);
         filter.setMinLevel(minLevel);
         filter.setMaxLevel(maxLevel);
-        filter.setOrder(order);
-        filter.setPageNumber(pageNumber);
-        filter.setPageSize(pageSize);
         return filter;
     }
 }

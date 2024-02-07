@@ -6,7 +6,7 @@ import com.example.demo.filter.Filter;
 import java.util.List;
 
 public interface PlayerDao {
-    List<Player> getAllPlayers();
+    Integer getPlayersCountByFilter(Filter filter);
     List<Player> getPlayersByFilter(Filter filter);
     Player createPlayer(Player player);
     Player updatePlayer(Player player);

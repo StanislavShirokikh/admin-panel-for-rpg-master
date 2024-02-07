@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import com.example.demo.filter.PlayerOrder;
@@ -24,19 +23,24 @@ import java.util.List;
 public interface PlayerController {
 
     @GetMapping("/rest/players/count")
-    List<Player> getAllPlayers();
+    Integer getPlayersCountByFilter(@RequestParam(required = false)  String name,
+                                         @RequestParam(required = false) String title, @RequestParam(required = false) Race race,
+                                         @RequestParam(required = false) Profession profession, @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date after,
+                                         @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date before, @RequestParam(required = false) Boolean banned,
+                                         @RequestParam(required = false) Integer minExperience, @RequestParam(required = false) Integer maxExperience,
+                                         @RequestParam(required = false) Integer minLevel, @RequestParam(required = false) Integer maxLevel);
 
-    @GetMapping("/rest/players/")
+    @GetMapping("/rest/players")
     List<PlayerResponse> getPlayersByFilter(@RequestParam(required = false) String name, @RequestParam(required = false) String title,
                                             @RequestParam(required = false) Race race, @RequestParam(required = false) Profession profession,
-                                            @RequestParam(required = false) Date after,
+                                            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date after,
                                             @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date before,
                                             @RequestParam(required = false) Boolean banned, @RequestParam(required = false) Integer minExperience,
                                             @RequestParam(required = false) Integer maxExperience, @RequestParam(required = false) Integer minLevel,
                                             @RequestParam(required = false) Integer maxLevel, @RequestParam(defaultValue = "ID") PlayerOrder order,
                                             @RequestParam(defaultValue = "0") Integer pageNumber, @RequestParam(defaultValue = "3") Integer pageSize);
 
-    @PostMapping("rest/players/")
+    @PostMapping("rest/players")
     PlayerResponse createPlayer(@RequestBody @Valid PlayerRequest playerRequest);
 
     @PutMapping("rest/players/{id}")

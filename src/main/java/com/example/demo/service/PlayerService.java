@@ -7,7 +7,7 @@ import com.example.demo.filter.Filter;
 import java.util.List;
 
 public interface PlayerService {
-    List<Player> getAllPlayers();
+    Integer getPlayersCountByFilter(Filter filter);
     List<Player> getPlayersByFilter(Filter filter);
     Player createPlayer(PlayerDto playerDto);
     Player updatePlayer(PlayerDto playerDto);

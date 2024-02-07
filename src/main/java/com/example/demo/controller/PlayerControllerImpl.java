@@ -23,8 +23,10 @@ public class PlayerControllerImpl implements PlayerController{
     private final PlayerService playerService;
 
     @Override
-    public List<Player> getAllPlayers() {
-        return playerService.getAllPlayers();
+    public Integer getPlayersCountByFilter(String name, String title, Race race, Profession profession, Date after, Date before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel, Integer maxLevel) {
+        Filter filter = Converter.convertToFilter(name, title, race, profession, after, before, banned,
+                minExperience, maxExperience, minLevel, maxLevel);
+        return playerService.getPlayersCountByFilter(filter);
     }
 
     @Override

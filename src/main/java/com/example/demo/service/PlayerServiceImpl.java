@@ -5,7 +5,6 @@ import com.example.demo.dao.PlayerDao;
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
 import com.example.demo.filter.Filter;
-import com.example.demo.response.PlayerResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ import java.util.List;
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerDao playerDao;
     @Override
-    public List<Player> getAllPlayers() {
-        return playerDao.getAllPlayers();
+    public Integer getPlayersCountByFilter(Filter filter) {
+        return playerDao.getPlayersCountByFilter(filter);
     }
 
     @Override
