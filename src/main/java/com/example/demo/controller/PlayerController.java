@@ -5,7 +5,6 @@ import com.example.demo.entity.Race;
 import com.example.demo.filter.PlayerOrder;
 import com.example.demo.request.PlayerRequest;
 import com.example.demo.response.PlayerResponse;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,24 +16,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.Date;
 import java.util.List;
 @Validated
 public interface PlayerController {
 
     @GetMapping("/rest/players/count")
     Integer getPlayersCountByFilter(@RequestParam(required = false)  String name,
-                                         @RequestParam(required = false) String title, @RequestParam(required = false) Race race,
-                                         @RequestParam(required = false) Profession profession, @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date after,
-                                         @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date before, @RequestParam(required = false) Boolean banned,
-                                         @RequestParam(required = false) Integer minExperience, @RequestParam(required = false) Integer maxExperience,
-                                         @RequestParam(required = false) Integer minLevel, @RequestParam(required = false) Integer maxLevel);
+                                    @RequestParam(required = false) String title, @RequestParam(required = false) Race race,
+                                    @RequestParam(required = false) Profession profession, @RequestParam(required = false) Long after,
+                                    @RequestParam(required = false) Long before, @RequestParam(required = false) Boolean banned,
+                                    @RequestParam(required = false) Integer minExperience, @RequestParam(required = false) Integer maxExperience,
+                                    @RequestParam(required = false) Integer minLevel, @RequestParam(required = false) Integer maxLevel);
 
     @GetMapping("/rest/players")
     List<PlayerResponse> getPlayersByFilter(@RequestParam(required = false) String name, @RequestParam(required = false) String title,
                                             @RequestParam(required = false) Race race, @RequestParam(required = false) Profession profession,
-                                            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date after,
-                                            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") Date before,
+                                            @RequestParam(required = false) Long after,
+                                            @RequestParam(required = false) Long before,
                                             @RequestParam(required = false) Boolean banned, @RequestParam(required = false) Integer minExperience,
                                             @RequestParam(required = false) Integer maxExperience, @RequestParam(required = false) Integer minLevel,
                                             @RequestParam(required = false) Integer maxLevel, @RequestParam(defaultValue = "ID") PlayerOrder order,

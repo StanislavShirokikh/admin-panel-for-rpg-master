@@ -69,32 +69,26 @@ public class Converter {
         return list;
     }
 
-    public static Filter convertToFilter(String name, String title, Race race, Profession profession, Date after,
-                                         Date before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel,
+    public static Filter convertToFilter(String name, String title, Race race, Profession profession, Long after,
+                                         Long before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel,
                                          Integer maxLevel, PlayerOrder order, Integer pageNumber, Integer pageSize) {
-        Filter filter = convertToFilter(name, title, race, profession, after, before, banned, minExperience, maxExperience,
-                minLevel, maxLevel);
-        filter.setOrder(order);
-        filter.setPageNumber(pageNumber);
-        filter.setPageSize(pageSize);
-        return filter;
-    }
-
-    public static Filter convertToFilter(String name, String title, Race race, Profession profession, Date after,
-                                         Date before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel,
-                                         Integer maxLevel) {
         Filter filter = new Filter();
         filter.setName(name);
         filter.setTitle(title);
         filter.setRace(race);
         filter.setProfession(profession);
-        filter.setAfter(after);
-        filter.setBefore(before);
+        if (after != null && before != null) {
+            filter.setAfter(new Date(after));
+            filter.setBefore(new Date(before));
+        }
         filter.setBanned(banned);
         filter.setMinExperience(minExperience);
         filter.setMaxExperience(maxExperience);
         filter.setMinLevel(minLevel);
         filter.setMaxLevel(maxLevel);
+        filter.setOrder(order);
+        filter.setPageNumber(pageNumber);
+        filter.setPageSize(pageSize);
         return filter;
     }
 }

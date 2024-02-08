@@ -13,7 +13,6 @@ import com.example.demo.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -23,9 +22,9 @@ public class PlayerControllerImpl implements PlayerController{
     private final PlayerService playerService;
 
     @Override
-    public Integer getPlayersCountByFilter(String name, String title, Race race, Profession profession, Date after, Date before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel, Integer maxLevel) {
+    public Integer getPlayersCountByFilter(String name, String title, Race race, Profession profession, Long after, Long before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel, Integer maxLevel) {
         Filter filter = Converter.convertToFilter(name, title, race, profession, after, before, banned,
-                minExperience, maxExperience, minLevel, maxLevel);
+                minExperience, maxExperience, minLevel, maxLevel, null, null, null);
         return playerService.getPlayersCountByFilter(filter);
     }
 
@@ -39,7 +38,7 @@ public class PlayerControllerImpl implements PlayerController{
 
     @Override
     public List<PlayerResponse> getPlayersByFilter(String name, String title, Race race, Profession profession,
-                                                   Date after, Date before, Boolean banned, Integer minExperience, Integer maxExperience,
+                                                   Long after, Long before, Boolean banned, Integer minExperience, Integer maxExperience,
                                                    Integer minLevel, Integer maxLevel, PlayerOrder order, Integer pageNumber,
                                                    Integer pageSize) {
         Filter filter = Converter.convertToFilter(name, title, race, profession, after, before, banned, minExperience, maxExperience,

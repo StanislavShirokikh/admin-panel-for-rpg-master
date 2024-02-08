@@ -185,32 +185,32 @@ public class PlayerDaoImpl implements PlayerDao{
             params.addValue("profession_name", String.valueOf(filter.getProfession()));
         }
         if (filter.getAfter() != null) {
-            queryConditions.add("player.birthday > :birthday");
-            params.addValue("birthday", filter.getAfter());
+            queryConditions.add("player.birthday > :after");
+            params.addValue("after", filter.getAfter());
         }
         if (filter.getBefore() != null) {
-            queryConditions.add("player.birthday < :birthday");
-            params.addValue("birthday", filter.getBefore());
+            queryConditions.add("player.birthday < :before");
+            params.addValue("before", filter.getBefore());
         }
         if (filter.getBanned() != null) {
             queryConditions.add("player.banned = :banned");
             params.addValue("banned", filter.getBanned());
         }
         if (filter.getMinExperience() != null) {
-            queryConditions.add("player.experience > :experience");
-            params.addValue("experience", filter.getMinExperience());
+            queryConditions.add("player.experience > :minExperience");
+            params.addValue("minExperience", filter.getMinExperience());
         }
         if (filter.getMaxExperience() != null) {
-            queryConditions.add("player.experience < :experience");
-            params.addValue("experience", filter.getMaxExperience());
+            queryConditions.add("player.experience < :maxExperience");
+            params.addValue("maxExperience", filter.getMaxExperience());
         }
         if (filter.getMinLevel() != null) {
-            queryConditions.add("player.level > :level");
-            params.addValue("level", filter.getMinLevel());
+            queryConditions.add("player.level > :minLevel");
+            params.addValue("minLevel", filter.getMinLevel());
         }
         if (filter.getMaxLevel() != null) {
-            queryConditions.add("player.level < :level");
-            params.addValue("level", filter.getMaxLevel());
+            queryConditions.add("player.level < :maxLevel");
+            params.addValue("maxLevel", filter.getMaxLevel());
         }
 
         String sqlCondition = "";
@@ -229,7 +229,7 @@ public class PlayerDaoImpl implements PlayerDao{
             paginationParams.add( "LIMIT :limit");
             params.addValue("limit", filter.getPageSize());
             paginationParams.add("OFFSET :offset");
-            params.addValue("offset", filter.getPageNumber());
+            params.addValue("offset", filter.getPageSize() * filter.getPageNumber());
         }
         String sqlOption = "";
         if (!paginationParams.isEmpty()) {
@@ -241,8 +241,7 @@ public class PlayerDaoImpl implements PlayerDao{
                 "JOIN race " +
                 "ON player.race_id = race.id " +
                 "JOIN profession " +
-                "ON player.profession_id = profession.id " +
-                sqlCondition + sqlOption;
+                "ON player.profession_id = profession.id " + sqlCondition + sqlOption;
         return namedParameterJdbcTemplate.query(sql, params, new PlayerRowMapper());
     }
 }
