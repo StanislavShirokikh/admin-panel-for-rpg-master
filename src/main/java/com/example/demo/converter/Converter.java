@@ -2,8 +2,16 @@ package com.example.demo.converter;
 
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
+import com.example.demo.entity.Profession;
+import com.example.demo.entity.Race;
+import com.example.demo.filter.Filter;
+import com.example.demo.filter.PlayerOrder;
 import com.example.demo.request.PlayerRequest;
 import com.example.demo.response.PlayerResponse;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class Converter {
     public static Player convertToPlayer(PlayerDto playerDto) {
@@ -50,5 +58,37 @@ public class Converter {
         playerResponse.setBirthday(player.getBirthday().getTime());
         playerResponse.setBanned(player.getBanned());
         return playerResponse;
+    }
+
+    public static List<PlayerResponse> convertToListPlayerResponse(List<Player> players) {
+        List<PlayerResponse> list = new ArrayList<>();
+        for (Player player : players) {
+            PlayerResponse playerResponse = convertToPlayerResponse(player);
+            list.add(playerResponse);
+        }
+        return list;
+    }
+
+    public static Filter convertToFilter(String name, String title, Race race, Profession profession, Long after,
+                                         Long before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel,
+                                         Integer maxLevel, PlayerOrder order, Integer pageNumber, Integer pageSize) {
+        Filter filter = new Filter();
+        filter.setName(name);
+        filter.setTitle(title);
+        filter.setRace(race);
+        filter.setProfession(profession);
+        if (after != null && before != null) {
+            filter.setAfter(new Date(after));
+            filter.setBefore(new Date(before));
+        }
+        filter.setBanned(banned);
+        filter.setMinExperience(minExperience);
+        filter.setMaxExperience(maxExperience);
+        filter.setMinLevel(minLevel);
+        filter.setMaxLevel(maxLevel);
+        filter.setOrder(order);
+        filter.setPageNumber(pageNumber);
+        filter.setPageSize(pageSize);
+        return filter;
     }
 }
