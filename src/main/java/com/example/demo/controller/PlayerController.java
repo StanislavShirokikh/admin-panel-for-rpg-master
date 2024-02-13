@@ -41,7 +41,7 @@ public interface PlayerController {
     @PostMapping("rest/players")
     PlayerResponse createPlayer(@RequestBody @Valid PlayerRequest playerRequest);
 
-    @PutMapping("rest/players/{id}")
+    @PostMapping("rest/players/{id}")
     PlayerResponse updatePlayer(@PathVariable @Min(0) long id,
                                 @RequestBody @Valid PlayerRequest playerRequest);
 

@@ -213,27 +213,22 @@ public class PlayerDaoImpl implements PlayerDao{
             params.addValue("maxLevel", filter.getMaxLevel());
         }
 
-        String sqlCondition = "";
-        if (queryConditions.size() > 1) {
-            sqlCondition = "WHERE " + String.join(" AND ", queryConditions);
-        } if (queryConditions.size() == 1) {
-            sqlCondition = "WHERE " + queryConditions.get(0);
+        String sqlConditions = "";
+        if (!queryConditions.isEmpty()) {
+            sqlConditions = "WHERE " + String.join(" AND ", queryConditions);
         }
 
         List<String> paginationParams = new ArrayList<>();
-        if (filter.getOrder() != null) {
-            paginationParams.add(" ORDER BY :order");
-            params.addValue("order", "player." + filter.getOrder().getFieldName());
-        }
+
         if (filter.getPageNumber() != null && filter.getPageSize() != null) {
             paginationParams.add( "LIMIT :limit");
             params.addValue("limit", filter.getPageSize());
             paginationParams.add("OFFSET :offset");
             params.addValue("offset", filter.getPageSize() * filter.getPageNumber());
         }
-        String sqlOption = "";
+        String sqlPagination = "";
         if (!paginationParams.isEmpty()) {
-            sqlOption = String.join(" ", paginationParams);
+            sqlPagination = String.join(" ", paginationParams);
         }
         String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name, " +
                 "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
@@ -241,7 +236,16 @@ public class PlayerDaoImpl implements PlayerDao{
                 "JOIN race " +
                 "ON player.race_id = race.id " +
                 "JOIN profession " +
-                "ON player.profession_id = profession.id " + sqlCondition + sqlOption;
+                "ON player.profession_id = profession.id " + sqlConditions;
+
+        if (filter.getOrder() != null) {
+            sql += " ORDER BY player." + filter.getOrder().getFieldName() + " ";
+        }
+
+        sql += sqlPagination;
+
+
+        log.debug("Сформированный запрос: {}", sql);
         return namedParameterJdbcTemplate.query(sql, params, new PlayerRowMapper());
     }
 }
