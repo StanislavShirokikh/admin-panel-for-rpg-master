@@ -39,9 +39,15 @@ public class PlayerDaoImpl implements PlayerDao{
 
     @Override
     public Integer getPlayersCountByFilter(Filter filter) {
-        List<Player> players = getPlayersListWithSqlOption(filter);
+        QueryBuildingResult result = getClausesForFilterQuery(filter);
+        String sql = "SELECT count(player.id) " +
+                "FROM player " +
+                "JOIN race " +
+                "ON player.race_id = race.id " +
+                "JOIN profession " +
+                "ON player.profession_id = profession.id " + result.getSql();
 
-        return players.size();
+        return namedParameterJdbcTemplate.queryForObject(sql, result.getParameterSource(), Integer.class);
     }
 
     @Override
@@ -62,6 +68,7 @@ public class PlayerDaoImpl implements PlayerDao{
             put("birthday", player.getBirthday());
             put("banned", player.getBanned());
         }};
+
         long id = simplePlayerJdbcInsert.executeAndReturnKey(map).longValue();
 
         String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name," +
@@ -143,7 +150,7 @@ public class PlayerDaoImpl implements PlayerDao{
                 "JOIN profession ON player.profession_id = profession.id " +
                 "WHERE player.id=?";
 
-        Player player = null;
+        Player player;
         try {
             player = jdbcTemplate.queryForObject(sql, new PlayerRowMapper(), id);
         } catch (Exception e) {
@@ -165,6 +172,21 @@ public class PlayerDaoImpl implements PlayerDao{
     }
 
     private List<Player> getPlayersListWithSqlOption(Filter filter) {
+        QueryBuildingResult result = getClausesForFilterQuery(filter);
+        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name, " +
+                "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
+                "FROM player " +
+                "JOIN race " +
+                "ON player.race_id = race.id " +
+                "JOIN profession " +
+                "ON player.profession_id = profession.id " + result.getSql();
+
+        log.debug("Сформированный запрос: {}", sql);
+        return namedParameterJdbcTemplate.query(sql, result.getParameterSource(), new PlayerRowMapper());
+    }
+
+
+    private QueryBuildingResult getClausesForFilterQuery(Filter filter) {
         List<String> queryConditions = new ArrayList<>();
         MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -230,22 +252,17 @@ public class PlayerDaoImpl implements PlayerDao{
         if (!paginationParams.isEmpty()) {
             sqlPagination = String.join(" ", paginationParams);
         }
-        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name, " +
-                "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
-                "FROM player " +
-                "JOIN race " +
-                "ON player.race_id = race.id " +
-                "JOIN profession " +
-                "ON player.profession_id = profession.id " + sqlConditions;
+        String clausesSql = sqlConditions;
 
         if (filter.getOrder() != null) {
-            sql += " ORDER BY player." + filter.getOrder().getFieldName() + " ";
+            clausesSql += " ORDER BY player." + filter.getOrder().getFieldName() + " ";
         }
 
-        sql += sqlPagination;
+        clausesSql += sqlPagination;
 
-
-        log.debug("Сформированный запрос: {}", sql);
-        return namedParameterJdbcTemplate.query(sql, params, new PlayerRowMapper());
+        QueryBuildingResult result = new QueryBuildingResult();
+        result.setSql(clausesSql);
+        result.setParameterSource(params);
+        return result;
     }
 }
