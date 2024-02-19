@@ -210,7 +210,8 @@ class PlayerControllerImplTest {
         mockMvc.perform(post("/rest/players/{id}", String.valueOf(Long.MAX_VALUE))
                 .content(objectMapper.writeValueAsString(playerRequest))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Player with this id not found"));;
     }
 
     @Test
@@ -296,5 +297,12 @@ class PlayerControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedPlayer)));
+    }
+
+    @Test
+    void getPlayerWithBadId() throws Exception {
+        mockMvc.perform(get("/rest/players/{id}", String.valueOf(Long.MAX_VALUE)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Player with this id not found"));
     }
 }
