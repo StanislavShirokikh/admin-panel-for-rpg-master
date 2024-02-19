@@ -7,6 +7,7 @@ import com.example.demo.entity.Player;
 import com.example.demo.filter.Filter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,8 +38,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player updatePlayer(PlayerDto playerDto) {
         Player player = Converter.convertToPlayer(playerDto);
-        player.setLevel(calculateCurrentLevel(player.getExperience()));
-        player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
+        if (player.getExperience() != null) {
+            player.setLevel(calculateCurrentLevel(player.getExperience()));
+            player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
+        }
 
         return playerDao.updatePlayer(player);
     }

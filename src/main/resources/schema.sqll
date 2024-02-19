@@ -24,12 +24,6 @@ CREATE TABLE player
     banned         BOOLEAN NOT NULL
 );
 
-SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name,
-                player.level, player.experience, player.until_next_level, player.birthday, player.banned
-                FROM player
-                JOIN race ON player.race_id = race.id
-                JOIN profession ON player.profession_id = profession.id
-                WHERE player.birthday > '11-01-1998';
 
 
 
