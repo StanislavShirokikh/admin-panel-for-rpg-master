@@ -11,10 +11,8 @@ import com.example.demo.filter.PlayerOrder;
 import com.example.demo.request.PlayerRequest;
 import com.example.demo.response.PlayerResponse;
 import com.example.demo.service.PlayerService;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,16 +21,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -292,24 +285,16 @@ class PlayerControllerImplTest {
         playerDto.setTitle("Magic");
         playerDto.setRace(Race.HUMAN);
         playerDto.setProfession(Profession.DRUID);
-        playerDto.setBirthday(new Date(1332226800000L));//20.03.2012
+        playerDto.setBirthday(new Date());
         playerDto.setBanned(false);
         playerDto.setExperience(1000);
 
         Player player = playerService.createPlayer(playerDto);
+        PlayerResponse expectedPlayer = Converter.convertToPlayerResponse(player);
 
-        mockMvc.perform(get("/rest/players/{id)", String.valueOf(player.getId()) )
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/rest/players/{id}", player.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value(playerDto.getName()))
-                .andExpect(jsonPath("$.title").value(playerDto.getTitle()))
-                .andExpect(jsonPath("$.race").value(String.valueOf(playerDto.getRace())))
-                .andExpect(jsonPath("$.profession").value(String.valueOf(playerDto.getProfession())))
-                .andExpect(jsonPath("$.birthday").value(playerDto.getBirthday()))
-                .andExpect(jsonPath("$.experience").value(playerDto.getExperience()))
-                .andExpect(jsonPath("$.banned").value(playerDto.getBanned()))
-                .andExpect(jsonPath("$.level").value(player.getLevel()))
-                .andExpect(jsonPath("$.untilNextLevel").value(player.getUntilNextLevel()));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedPlayer)));
     }
 }
