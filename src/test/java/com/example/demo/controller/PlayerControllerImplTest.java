@@ -266,10 +266,6 @@ class PlayerControllerImplTest {
 
         mockMvc.perform(delete("/rest/players/{id}", player.getId()))
                 .andExpect(status().isOk());
-
-        assertThrows(PlayerNotFoundException.class, () -> {
-        playerService.getPlayerById(player.getId());
-        });
     }
 
     @Test
@@ -277,6 +273,10 @@ class PlayerControllerImplTest {
         mockMvc.perform(delete("/rest/players/{id}", String.valueOf(Long.MAX_VALUE)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Player with this id not found"));
+
+        assertThrows(PlayerNotFoundException.class, () -> {
+            playerService.getPlayerById(Long.MAX_VALUE);
+        });
     }
 
     @Test
