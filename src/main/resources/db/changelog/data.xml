@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="data-for-race" author="Stanislav">
+        <preConditions>
+            <and>
+                <tableExists tableName="race"/>
+                <sqlCheck expectedResult="0">
+                    SELECT count(*)
+                    FROM race
+                    WHERE name in   (('HUMAN'),
+                                    ('DWARF'),
+                                    ('ELF'),
+                                    ('GIANT'),
+                                    ('ORC'),
+                                    ('TROLL'),
+                                    ('HOBBIT'));
+                </sqlCheck>
+            </and>
+
+        </preConditions>
+        <sql>
+            INSERT INTO race(name)
+            VALUES ('HUMAN'),
+                   ('DWARF'),
+                   ('ELF'),
+                   ('GIANT'),
+                   ('ORC'),
+                   ('TROLL'),
+                   ('HOBBIT');
+        </sql>
+    </changeSet>
+</databaseChangeLog>
