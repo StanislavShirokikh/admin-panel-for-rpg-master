@@ -296,12 +296,21 @@ class PlayerControllerImplTest {
         playerDto.setExperience(1000);
 
         Player player = playerService.createPlayer(playerDto);
-        PlayerResponse expectedPlayer = Converter.convertToPlayerResponse(player);
+
 
         mockMvc.perform(get("/rest/players/{id}", player.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedPlayer)));
+                .andExpect(jsonPath("$.id").value(player.getId()))
+                .andExpect(jsonPath("$.name").value(player.getName()))
+                .andExpect(jsonPath("$.title").value(player.getTitle()))
+                .andExpect(jsonPath("$.race").value(String.valueOf(player.getRace())))
+                .andExpect(jsonPath("$.profession").value(String.valueOf(player.getProfession())))
+                .andExpect(jsonPath("$.birthday").value(player.getBirthday()))
+                .andExpect(jsonPath("$.experience").value(player.getExperience()))
+                .andExpect(jsonPath("$.banned").value(player.getBanned()))
+                .andExpect(jsonPath("$.level").value(player.getLevel()))
+                .andExpect(jsonPath("$.untilNextLevel").value(player.getUntilNextLevel()));
     }
 
     @Test
