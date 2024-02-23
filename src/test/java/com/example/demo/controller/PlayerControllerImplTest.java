@@ -268,6 +268,9 @@ class PlayerControllerImplTest {
 
         mockMvc.perform(delete("/rest/players/{id}", player.getId()))
                 .andExpect(status().isOk());
+
+        mockMvc.perform(delete("/rest/players/{id}", player.getId()))
+                .andExpect(jsonPath("$.message").value("Player with this id not found"));
     }
 
     @Test
