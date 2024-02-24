@@ -22,9 +22,9 @@ CREATE TABLE player
     race_id        INTEGER REFERENCES race(id),
     experience     INTEGER     CHECK ( 0 < experience AND experience <= 10000000 ),
     profession_id     INTEGER REFERENCES profession(id),
-    level          INTEGER check ( 0 < level ) NOT NULL,
+    level          INTEGER check ( 0 <= level ) NOT NULL,
     until_next_level INTEGER NOT NULL,
-    birthday       TIMESTAMP WITH TIME ZONE NOT NULL,
+    birthday       TIMESTAMP NOT NULL,
     banned         BOOLEAN NOT NULL
 );
 

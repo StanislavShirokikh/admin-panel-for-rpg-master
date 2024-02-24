@@ -207,11 +207,11 @@ public class PlayerDaoImpl implements PlayerDao{
             params.addValue("profession_name", String.valueOf(filter.getProfession()));
         }
         if (filter.getAfter() != null) {
-            queryConditions.add("player.birthday > :after");
+            queryConditions.add("player.birthday >= :after");
             params.addValue("after", filter.getAfter());
         }
         if (filter.getBefore() != null) {
-            queryConditions.add("player.birthday < :before");
+            queryConditions.add("player.birthday <= :before");
             params.addValue("before", filter.getBefore());
         }
         if (filter.getBanned() != null) {
@@ -219,19 +219,19 @@ public class PlayerDaoImpl implements PlayerDao{
             params.addValue("banned", filter.getBanned());
         }
         if (filter.getMinExperience() != null) {
-            queryConditions.add("player.experience > :minExperience");
+            queryConditions.add("player.experience >= :minExperience");
             params.addValue("minExperience", filter.getMinExperience());
         }
         if (filter.getMaxExperience() != null) {
-            queryConditions.add("player.experience < :maxExperience");
+            queryConditions.add("player.experience <= :maxExperience");
             params.addValue("maxExperience", filter.getMaxExperience());
         }
         if (filter.getMinLevel() != null) {
-            queryConditions.add("player.level > :minLevel");
+            queryConditions.add("player.level >= :minLevel");
             params.addValue("minLevel", filter.getMinLevel());
         }
         if (filter.getMaxLevel() != null) {
-            queryConditions.add("player.level < :maxLevel");
+            queryConditions.add("player.level <= :maxLevel");
             params.addValue("maxLevel", filter.getMaxLevel());
         }
 
