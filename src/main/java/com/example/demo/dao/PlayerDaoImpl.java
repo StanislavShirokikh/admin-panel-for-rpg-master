@@ -243,10 +243,14 @@ public class PlayerDaoImpl implements PlayerDao{
         List<String> paginationParams = new ArrayList<>();
 
         if (filter.getPageNumber() != null && filter.getPageSize() != null) {
-            paginationParams.add( "LIMIT :limit");
+            paginationParams.add("LIMIT :limit");
             params.addValue("limit", filter.getPageSize());
             paginationParams.add("OFFSET :offset");
-            params.addValue("offset", filter.getPageSize() * filter.getPageNumber());
+            if (filter.getPageNumber() == 0) {
+                params.addValue("offset", 0);
+            } else {
+                params.addValue("offset", (filter.getPageNumber() - 1) * filter.getPageSize());
+            }
         }
         String sqlPagination = "";
         if (!paginationParams.isEmpty()) {

@@ -6,6 +6,7 @@ import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.filter.Filter;
+import com.example.demo.filter.PlayerOrder;
 import com.example.demo.request.PlayerRequest;
 import com.example.demo.service.PlayerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,12 +62,6 @@ class PlayerControllerImplTest {
                 parseDateFromString("23.01.2023"), true, 2);
         Player player3 = getCreatedPlayer("Юджин", "Описание третьего игрока", Race.ELF, Profession.CLERIC,
                 parseDateFromString("22.01.2023"), true, 3);
-//        Player player4 = getCreatedPlayer("Юла", "Описание четвертого игрока", Race.HUMAN, Profession.DRUID,
-//                parseDateFromString("22.01.2023"), true, 4);
-//        Player player5 = getCreatedPlayer("Юля", "Описание пятого игрока", Race.HUMAN, Profession.DRUID,
-//                parseDateFromString("22.01.2023"), true, 5);
-//        Player player6 = getCreatedPlayer("Юра", "Описание шестого игрока", Race.HUMAN, Profession.DRUID,
-//                parseDateFromString("22.01.2023"), true, 6);
 
         mockMvc.perform(get("/rest/players")
                         .param("name", "Ю"))
@@ -104,6 +99,10 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].experience").value(player3.getExperience()))
                 .andExpect(jsonPath("$[2].level").value(player3.getLevel()))
                 .andExpect(jsonPath("$[2].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
     }
 
     @Test
@@ -151,6 +150,10 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].experience").value(player3.getExperience()))
                 .andExpect(jsonPath("$[2].level").value(player3.getLevel()))
                 .andExpect(jsonPath("$[2].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
     }
 
     @Test
@@ -199,6 +202,10 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].experience").value(player3.getExperience()))
                 .andExpect(jsonPath("$[2].level").value(player3.getLevel()))
                 .andExpect(jsonPath("$[2].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
     }
 
     @Test
@@ -248,6 +255,10 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].experience").value(player3.getExperience()))
                 .andExpect(jsonPath("$[2].level").value(player3.getLevel()))
                 .andExpect(jsonPath("$[2].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
     }
 
     @Test
@@ -298,15 +309,19 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].experience").value(player3.getExperience()))
                 .andExpect(jsonPath("$[2].level").value(player3.getLevel()))
                 .andExpect(jsonPath("$[2].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
     }
 
     @Test
     void getPlayersByFilter6() throws Exception {
-        getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
+        Player player1 = getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
                 parseDateFromString("22.01.2023"), true, 1);
-        getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
+        Player player2 = getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
                 parseDateFromString("23.01.2023"), true, 2);
-        getCreatedPlayer("Юджин", "Описание третьего игрока", Race.ELF, Profession.CLERIC,
+        Player player3 = getCreatedPlayer("Юджин", "Описание третьего игрока", Race.ELF, Profession.CLERIC,
                 parseDateFromString("22.01.2023"), true, 3);
 
         mockMvc.perform(get("/rest/players")
@@ -316,6 +331,10 @@ class PlayerControllerImplTest {
                         .param("profession", String.valueOf(Profession.DRUID)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(0));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
     }
 
     @Test
@@ -366,6 +385,10 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].experience").value(player3.getExperience()))
                 .andExpect(jsonPath("$[2].level").value(player3.getLevel()))
                 .andExpect(jsonPath("$[2].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
     }
 
     @Test
@@ -414,6 +437,127 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].experience").value(player3.getExperience()))
                 .andExpect(jsonPath("$[2].level").value(player3.getLevel()))
                 .andExpect(jsonPath("$[2].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
+    }
+
+    @Test
+    void getPlayersByFilterWithPagination() throws Exception {
+        Player player1 = getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
+                parseDateFromString("22.01.2023"), true, 1);
+        Player player2 = getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
+                parseDateFromString("23.01.2023"), true, 2);
+        Player player3 = getCreatedPlayer("Юджин", "Описание третьего игрока", Race.ELF, Profession.CLERIC,
+                parseDateFromString("22.01.2023"), true, 3);
+
+        mockMvc.perform(get("/rest/players")
+                        .param("name", "Ю")
+                        .param("pageNumber", "1")
+                        .param("pageSize", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].id").value(player1.getId()))
+                .andExpect(jsonPath("$[0].name").value(player1.getName()))
+                .andExpect(jsonPath("$[0].title").value(player1.getTitle()))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(player1.getRace())))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(player1.getProfession())))
+                .andExpect(jsonPath("$[0].birthday").value(player1.getBirthday()))
+                .andExpect(jsonPath("$[0].banned").value(player1.getBanned()))
+                .andExpect(jsonPath("$[0].experience").value(player1.getExperience()))
+                .andExpect(jsonPath("$[0].level").value(player1.getLevel()))
+                .andExpect(jsonPath("$[0].untilNextLevel").value(player1.getUntilNextLevel()));
+
+        mockMvc.perform(get("/rest/players")
+                        .param("name", "Ю")
+                        .param("pageNumber", "2")
+                        .param("pageSize", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].id").value(player2.getId()))
+                .andExpect(jsonPath("$[0].name").value(player2.getName()))
+                .andExpect(jsonPath("$[0].title").value(player2.getTitle()))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(player2.getRace())))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(player2.getProfession())))
+                .andExpect(jsonPath("$[0].birthday").value(player2.getBirthday()))
+                .andExpect(jsonPath("$[0].banned").value(player2.getBanned()))
+                .andExpect(jsonPath("$[0].experience").value(player2.getExperience()))
+                .andExpect(jsonPath("$[0].level").value(player2.getLevel()))
+                .andExpect(jsonPath("$[0].untilNextLevel").value(player2.getUntilNextLevel()));
+
+        mockMvc.perform(get("/rest/players")
+                        .param("name", "Ю")
+                        .param("pageNumber", "3")
+                        .param("pageSize", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].id").value(player3.getId()))
+                .andExpect(jsonPath("$[0].name").value(player3.getName()))
+                .andExpect(jsonPath("$[0].title").value(player3.getTitle()))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(player3.getRace())))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(player3.getProfession())))
+                .andExpect(jsonPath("$[0].birthday").value(player3.getBirthday()))
+                .andExpect(jsonPath("$[0].banned").value(player3.getBanned()))
+                .andExpect(jsonPath("$[0].experience").value(player3.getExperience()))
+                .andExpect(jsonPath("$[0].level").value(player3.getLevel()))
+                .andExpect(jsonPath("$[0].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
+    }
+
+    @Test
+    void getPlayersByFilterWithSorting() throws Exception {
+        Player player3 = getCreatedPlayer("Юджин", "Описание третьего игрока", Race.ELF, Profession.CLERIC,
+                parseDateFromString("22.01.2023"), true, 3);
+        Player player2 = getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
+                parseDateFromString("23.01.2023"), true, 2);
+        Player player1 = getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
+                parseDateFromString("22.01.2023"), true, 1);
+
+        mockMvc.perform(get("/rest/players")
+                        .param("name", "Ю")
+                        .param("order", String.valueOf(PlayerOrder.NAME)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(3))
+                .andExpect(jsonPath("$[0].id").value(player1.getId()))
+                .andExpect(jsonPath("$[0].name").value(player1.getName()))
+                .andExpect(jsonPath("$[0].title").value(player1.getTitle()))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(player1.getRace())))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(player1.getProfession())))
+                .andExpect(jsonPath("$[0].birthday").value(player1.getBirthday()))
+                .andExpect(jsonPath("$[0].banned").value(player1.getBanned()))
+                .andExpect(jsonPath("$[0].experience").value(player1.getExperience()))
+                .andExpect(jsonPath("$[0].level").value(player1.getLevel()))
+                .andExpect(jsonPath("$[0].untilNextLevel").value(player1.getUntilNextLevel()))
+
+                .andExpect(jsonPath("$[1].id").value(player2.getId()))
+                .andExpect(jsonPath("$[1].name").value(player2.getName()))
+                .andExpect(jsonPath("$[1].title").value(player2.getTitle()))
+                .andExpect(jsonPath("$[1].race").value(String.valueOf(player2.getRace())))
+                .andExpect(jsonPath("$[1].profession").value(String.valueOf(player2.getProfession())))
+                .andExpect(jsonPath("$[1].birthday").value(player2.getBirthday()))
+                .andExpect(jsonPath("$[1].banned").value(player2.getBanned()))
+                .andExpect(jsonPath("$[1].experience").value(player2.getExperience()))
+                .andExpect(jsonPath("$[1].level").value(player2.getLevel()))
+                .andExpect(jsonPath("$[1].untilNextLevel").value(player2.getUntilNextLevel()))
+
+                .andExpect(jsonPath("$[2].id").value(player3.getId()))
+                .andExpect(jsonPath("$[2].name").value(player3.getName()))
+                .andExpect(jsonPath("$[2].title").value(player3.getTitle()))
+                .andExpect(jsonPath("$[2].race").value(String.valueOf(player3.getRace())))
+                .andExpect(jsonPath("$[2].profession").value(String.valueOf(player3.getProfession())))
+                .andExpect(jsonPath("$[2].birthday").value(player3.getBirthday()))
+                .andExpect(jsonPath("$[2].banned").value(player3.getBanned()))
+                .andExpect(jsonPath("$[2].experience").value(player3.getExperience()))
+                .andExpect(jsonPath("$[2].level").value(player3.getLevel()))
+                .andExpect(jsonPath("$[2].untilNextLevel").value(player3.getUntilNextLevel()));
+
+        playerService.deletePlayer(player1.getId());
+        playerService.deletePlayer(player2.getId());
+        playerService.deletePlayer(player3.getId());
     }
 
     @Test
