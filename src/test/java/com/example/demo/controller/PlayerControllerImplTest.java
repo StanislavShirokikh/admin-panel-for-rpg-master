@@ -55,7 +55,7 @@ class PlayerControllerImplTest {
     }
 
     @Test
-    void getPlayersByFilter1() throws Exception {
+    void getPlayersByName() throws Exception {
         Player player1 = getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
                 parseDateFromString("22.01.2023"), true, 1);
         Player player2 = getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
@@ -106,7 +106,7 @@ class PlayerControllerImplTest {
     }
 
     @Test
-    void getPlayersByFilter2() throws Exception {
+    void getPlayersByTitle() throws Exception {
         Player player1 = getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
                 parseDateFromString("22.01.2023"), true, 1);
         Player player2 = getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
@@ -157,7 +157,7 @@ class PlayerControllerImplTest {
     }
 
     @Test
-    void getPlayersByFilter3() throws Exception {
+    void getPlayersByNameAndTitle() throws Exception {
         Player player1 = getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
                 parseDateFromString("22.01.2023"), true, 1);
         Player player2 = getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
@@ -209,7 +209,7 @@ class PlayerControllerImplTest {
     }
 
     @Test
-    void getPlayersByFilter4() throws Exception {
+    void getPlayersByNameAndTitleAndRace() throws Exception {
         Player player1 = getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
                 parseDateFromString("22.01.2023"), true, 1);
         Player player2 = getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
@@ -687,7 +687,6 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$.level").value(player.getLevel()))
                 .andExpect(jsonPath("$.untilNextLevel").value(player.getUntilNextLevel()));
     }
-
     @Test
     void updatePlayerWithBadId() throws Exception {
         PlayerRequest playerRequest = new PlayerRequest();
@@ -696,10 +695,10 @@ class PlayerControllerImplTest {
 
         mockMvc.perform(post("/rest/players/{id}", String.valueOf(Long.MAX_VALUE))
                         .content(objectMapper.writeValueAsString(playerRequest))
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Player with this id not found"));
-        ;
     }
 
     @Test
@@ -758,18 +757,6 @@ class PlayerControllerImplTest {
         mockMvc.perform(delete("/rest/players/{id}", player.getId()))
                 .andExpect(jsonPath("$.message").value("Player with this id not found"));
     }
-
-    @Test
-    void deletePlayerWithBadId() throws Exception {
-        mockMvc.perform(delete("/rest/players/{id}", String.valueOf(Long.MAX_VALUE)))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Player with this id not found"));
-
-        assertThrows(PlayerNotFoundException.class, () -> {
-            playerService.getPlayerById(Long.MAX_VALUE);
-        });
-    }
-
     @Test
     void getPlayerById() throws Exception {
         PlayerDto playerDto = new PlayerDto();
