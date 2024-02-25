@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="data-for-race" author="Stanislav">
+        <preConditions>
+            <and>
+                <tableExists tableName="race"/>
+                <sqlCheck expectedResult="0">
+                    SELECT count(*)
+                    FROM race
+                    WHERE name in   (('HUMAN'),
+                                    ('DWARF'),
+                                    ('ELF'),
+                                    ('GIANT'),
+                                    ('ORC'),
+                                    ('TROLL'),
+                                    ('HOBBIT'));
+                </sqlCheck>
+            </and>
+
+        </preConditions>
+        <sql>
+            INSERT INTO race(name)
+            VALUES ('HUMAN'),
+                   ('DWARF'),
+                   ('ELF'),
+                   ('GIANT'),
+                   ('ORC'),
+                   ('TROLL'),
+                   ('HOBBIT');
+        </sql>
+    </changeSet>
+
+    <changeSet id="data-for-profession" author="Stanislav">
+        <preConditions>
+            <and>
+                <tableExists tableName="profession"/>
+                <sqlCheck expectedResult="0">
+                    SELECT count(*)
+                    FROM profession
+                    WHERE name in  (('WARRIOR'),
+                    ('ROGUE'),
+                    ('SORCERER'),
+                    ('CLERIC'),
+                    ('PALADIN'),
+                    ('NAZGUL'),
+                    ('WARLOCK'),
+                    ('DRUID'))
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO profession(name)
+            VALUES ('WARRIOR'),
+                   ('ROGUE'),
+                   ('SORCERER'),
+                   ('CLERIC'),
+                   ('PALADIN'),
+                   ('NAZGUL'),
+                   ('WARLOCK'),
+                   ('DRUID');
+        </sql>
+    </changeSet>
+    <changeSet id="data-for-player" author="Stanislav">
+        <preConditions>
+            <and>
+                <tableExists tableName="race"/>
+                <tableExists tableName="profession"/>
+                <sqlCheck expectedResult="0">
+                    SELECT count(*)
+                    FROM player
+                    WHERE id > 0;
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO player(name, title, race_id, profession_id, birthday, banned, experience, level, until_next_level)
+            VALUES ('Ниус', 'Приходящий Без Шума', 1, 1, '2010-10-12', false, 58347, 33, 1153)
+                 , ('Никрашш', 'НайтВульф', 2, 2, '2010-02-14', false, 174403, 58, 2597)
+                 , ('Эззэссэль', 'шипящая', 3, 3, '2006-02-28', true, 804, 3, 196)
+                 , ('Бэлан', 'Тсе Раа', 4, 4, '2008-02-25', true, 44553, 29, 1947)
+                 , ('Элеонора', 'Бабушка', 5, 5, '2006-01-07', true, 63986, 35, 2614)
+                 , ('Эман', 'Ухастый Летун', 6, 6, '2004-06-21', false, 163743, 56, 1557)
+                 , ('Талан', 'Рожденный в Бронксе', 7, 7, '2005-05-15', false, 68950, 36, 1350)
+                 , ('Арилан', 'Благотворитель', 1, 6, '2006-08-10', false, 61023, 34, 1977)
+                 , ('Деракт', 'Эльфёнок Красное Ухо', 4, 7, '2010-06-22', false, 156630, 55, 2970)
+                 , ('Архилл', 'Смертоносный', 3, 2, '2005-01-12', false, 76010, 38, 1990);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

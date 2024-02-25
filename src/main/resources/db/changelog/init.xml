@@ -1,0 +1,64 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="init-race" author="Stanislav">
+        <preConditions>
+            <not>
+                <tableExists tableName="race"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE race
+            (
+                id   SERIAL PRIMARY KEY,
+                name VARCHAR NOT NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="init-profession" author="Stanislav">
+        <preConditions>
+            <not>
+                <tableExists tableName="profession"/>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TABLE profession
+            (
+                id   SERIAL PRIMARY KEY,
+                name VARCHAR NOT NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="init-player" author="Stanislav">
+        <preConditions>
+            <and>
+                <tableExists tableName="race"/>
+                <tableExists tableName="profession"/>
+                <not>
+                    <tableExists tableName="player"/>
+                </not>
+            </and>
+        </preConditions>
+        <sql>
+            <![CDATA[
+                CREATE TABLE player
+                (
+                    id             SERIAL PRIMARY KEY,
+                    name           VARCHAR(12) NOT NULL,
+                    title          VARCHAR(30) NULL,
+                    race_id        INTEGER REFERENCES race(id),
+                    experience     INTEGER CHECK (0 < experience AND experience <= 10000000),
+                    profession_id  INTEGER REFERENCES profession(id),
+                    level          INTEGER CHECK (0 < level) NOT NULL,
+                    until_next_level INTEGER NOT NULL,
+                    birthday       TIMESTAMP WITH TIME ZONE NOT NULL,
+                    banned         BOOLEAN NOT NULL
+                );
+            ]]>
+        </sql>
+    </changeSet>
+</databaseChangeLog>
