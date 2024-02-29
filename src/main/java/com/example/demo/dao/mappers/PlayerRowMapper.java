@@ -17,8 +17,17 @@ public class PlayerRowMapper implements RowMapper<Player> {
         player.setId(rs.getLong("id"));
         player.setName(rs.getString("name"));
         player.setTitle(rs.getString("title"));
-        player.setRace(Race.valueOf(rs.getString("race_name")));
-        player.setProfession(Profession.valueOf(rs.getString("profession_name")));
+
+        Race race = new Race();
+        race.setId(rs.getLong("race_id"));
+        race.setName(rs.getString("race_name"));
+        player.setRace(race);
+
+        Profession profession = new Profession();
+        profession.setId(rs.getLong("profession_id"));
+        profession.setName(rs.getString("profession_name"));
+        player.setProfession(profession);
+
         player.setLevel(rs.getInt("level"));
         player.setExperience(rs.getInt("experience"));
         player.setUntilNextLevel(rs.getInt("until_next_level"));

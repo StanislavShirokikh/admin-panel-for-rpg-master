@@ -37,8 +37,15 @@ public class Converter {
         PlayerDto playerDto = new PlayerDto();
         playerDto.setName(playerRequest.getName());
         playerDto.setTitle(playerRequest.getTitle());
-        playerDto.setRace(playerRequest.getRace());
-        playerDto.setProfession(playerRequest.getProfession());
+
+        Race race = new Race();
+        race.setName(playerRequest.getRace());
+        playerDto.setRace(race);
+
+        Profession profession = new Profession();
+        profession.setName(playerRequest.getProfession());
+        playerDto.setProfession(profession);
+
         playerDto.setBirthday(playerRequest.getBirthday());
         playerDto.setExperience(playerRequest.getExperience());
         playerDto.setBanned(playerRequest.getBanned());
@@ -50,8 +57,8 @@ public class Converter {
         playerResponse.setId(player.getId());
         playerResponse.setName(player.getName());
         playerResponse.setTitle(player.getTitle());
-        playerResponse.setRace(player.getRace());
-        playerResponse.setProfession(player.getProfession());
+        playerResponse.setRace(player.getRace().getName());
+        playerResponse.setProfession(player.getProfession().getName());
         playerResponse.setLevel(player.getLevel());
         playerResponse.setExperience(player.getExperience());
         playerResponse.setUntilNextLevel(player.getUntilNextLevel());

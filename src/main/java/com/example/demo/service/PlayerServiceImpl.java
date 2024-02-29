@@ -3,8 +3,12 @@ package com.example.demo.service;
 import com.example.demo.converter.Converter;
 import com.example.demo.dao.PlayerDao;
 import com.example.demo.dao.repository.PlayerRepository;
+import com.example.demo.dao.repository.ProfessionRepository;
+import com.example.demo.dao.repository.RaceRepository;
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
+import com.example.demo.entity.Profession;
+import com.example.demo.entity.Race;
 import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.filter.Filter;
 import jakarta.transaction.Transactional;
@@ -21,6 +25,8 @@ import java.util.Optional;
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerDao playerDao;
     private final PlayerRepository playerRepository;
+    private final RaceRepository raceRepository;
+    private final ProfessionRepository professionRepository;
 
     @Override
     public Integer getPlayersCountByFilter(Filter filter) {
@@ -30,6 +36,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player createPlayer(PlayerDto playerDto) {
         Player player = Converter.convertToPlayer(playerDto);
+        Race race = raceRepository.findByName(playerDto.getRace().getName());
+        player.setRace(race);
+        Profession profession = professionRepository.findByName(playerDto.getProfession().getName());
+        player.setProfession(profession);
         player.setLevel(calculateCurrentLevel(player.getExperience()));
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
         return playerRepository.save(player);

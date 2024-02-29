@@ -23,9 +23,9 @@ public class PlayerRequest {
     @Size(max = 30, groups = Marker.OnUpdate.class)
     private String title;
     @NotNull(groups = Marker.OnCreate.class)
-    private Race race;
+    private String race;
     @NotNull(groups = Marker.OnCreate.class)
-    private Profession profession;
+    private String profession;
     @NotNull(groups = Marker.OnCreate.class)
     @com.example.demo.controller.validation.Date(after = "2000.01.01", before = "3000.12.31")
     private Date birthday;

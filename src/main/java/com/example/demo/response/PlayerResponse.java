@@ -9,8 +9,8 @@ public class PlayerResponse {
     private Long id;
     private String name;
     private String title;
-    private Race race;
-    private Profession profession;
+    private String race;
+    private String profession;
     private Integer level;
     private Integer experience;
     private Integer untilNextLevel;

@@ -71,7 +71,8 @@ public class PlayerDaoImpl implements PlayerDao{
 
         long id = simplePlayerJdbcInsert.executeAndReturnKey(map).longValue();
 
-        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name," +
+        String sql = "SELECT player.id, player.name, player.title, race_id, race.name race_name, profession_id, " +
+                "profession.name profession_name," +
                 "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
                 "FROM player " +
                 "JOIN race " +
@@ -98,11 +99,11 @@ public class PlayerDaoImpl implements PlayerDao{
         }
         if (player.getRace() != null) {
             clauses.add("race_id = (SELECT id FROM race WHERE name = ?)");
-            values.add(player.getRace().name());
+            values.add(player.getRace().getName());
         }
         if (player.getProfession() != null) {
             clauses.add("profession_id = (SELECT id FROM profession WHERE name = ?)");
-            values.add(player.getProfession().name());
+            values.add(player.getProfession().getName());
         }
         if (player.getBirthday() != null) {
             clauses.add("birthday = ?");
@@ -143,7 +144,8 @@ public class PlayerDaoImpl implements PlayerDao{
 
     @Override
     public Player getPlayerById(long id) {
-        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name," +
+        String sql = "SELECT player.id, player.name, player.title, race_id, race.name race_name, profession_id," +
+                " profession.name profession_name," +
                 "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
                 "FROM player " +
                 "JOIN race ON player.race_id = race.id " +
@@ -173,7 +175,8 @@ public class PlayerDaoImpl implements PlayerDao{
 
     private List<Player> getPlayersListWithSqlOption(Filter filter) {
         QueryBuildingResult result = getClausesForFilterQuery(filter);
-        String sql = "SELECT player.id, player.name, player.title, race.name race_name, profession.name profession_name, " +
+        String sql = "SELECT player.id, player.name, player.title, race_id race.name race_name, profession_id, " +
+                "profession.name profession_name, " +
                 "player.level, player.experience, player.until_next_level, player.birthday, player.banned " +
                 "FROM player " +
                 "JOIN race " +

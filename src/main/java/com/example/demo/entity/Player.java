@@ -27,15 +27,13 @@ public class Player {
     @ManyToOne
     @JoinColumn(name = "race_id")
     private Race race;
-    @Column(name = "profession_id")
+    @ManyToOne
+    @JoinColumn(name = "profession_id")
     private Profession profession;
     private Integer level;
-    @Column(columnDefinition = "INTEGER CHECK (0 < experience AND experience <= 10000000)")
     private Integer experience;
-    @Column(name = "until_next_level", columnDefinition = "INTEGER NOT NULL")
+    @Column(name = "until_next_level")
     private Integer untilNextLevel;
-    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE NOT NULL")
     private Date birthday;
-    @Column(columnDefinition = "NOT NULL")
     private Boolean banned;
 }
