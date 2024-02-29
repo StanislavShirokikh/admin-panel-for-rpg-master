@@ -2,7 +2,14 @@ package com.example.demo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -13,16 +20,15 @@ import java.util.Date;
 @Table(name = "player")
 public class Player {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "VARCHAR(12) NOT NULL")
     private String name;
-    @Column(columnDefinition = "VARCHAR(30) NULL")
     private String title;
-    @Column(name = "race_id")
+    @ManyToOne
+    @JoinColumn(name = "race_id")
     private Race race;
     @Column(name = "profession_id")
     private Profession profession;
-    @Column(columnDefinition = "INTEGER CHECK (0 < level) NOT NULL")
     private Integer level;
     @Column(columnDefinition = "INTEGER CHECK (0 < experience AND experience <= 10000000)")
     private Integer experience;
