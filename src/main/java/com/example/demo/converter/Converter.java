@@ -1,6 +1,8 @@
 package com.example.demo.converter;
 
 import com.example.demo.dto.PlayerDto;
+import com.example.demo.dto.ProfessionDto;
+import com.example.demo.dto.RaceDto;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
@@ -19,8 +21,8 @@ public class Converter {
         player.setId(playerDto.getId());
         player.setName(playerDto.getName());
         player.setTitle(playerDto.getTitle());
-        player.setRace(playerDto.getRace());
-        player.setProfession(playerDto.getProfession());
+        player.setRace(Converter.convertToRace(playerDto.getRaceDto()));
+        player.setProfession(Converter.convertToProfession(playerDto.getProfessionDto()));
         player.setExperience(playerDto.getExperience());
         player.setBirthday(playerDto.getBirthday());
         player.setBanned(playerDto.getBanned());
@@ -38,13 +40,13 @@ public class Converter {
         playerDto.setName(playerRequest.getName());
         playerDto.setTitle(playerRequest.getTitle());
 
-        Race race = new Race();
-        race.setName(playerRequest.getRace());
-        playerDto.setRace(race);
+        RaceDto raceDto = new RaceDto();
+        raceDto.setName(playerRequest.getRace());
+        playerDto.setRaceDto(raceDto);
 
-        Profession profession = new Profession();
-        profession.setName(playerRequest.getProfession());
-        playerDto.setProfession(profession);
+        ProfessionDto professionDto = new ProfessionDto();
+        professionDto.setName(playerRequest.getProfession());
+        playerDto.setProfessionDto(professionDto);
 
         playerDto.setBirthday(playerRequest.getBirthday());
         playerDto.setExperience(playerRequest.getExperience());
@@ -97,5 +99,17 @@ public class Converter {
         filter.setPageNumber(pageNumber);
         filter.setPageSize(pageSize);
         return filter;
+    }
+
+    public static Race convertToRace(RaceDto raceDto) {
+        Race race = new Race();
+        race.setName(raceDto.getName());
+        return race;
+    }
+
+    private static Profession convertToProfession(ProfessionDto professionDto) {
+        Profession profession = new Profession();
+        profession.setName(professionDto.getName());
+        return profession;
     }
 }

@@ -36,10 +36,13 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player createPlayer(PlayerDto playerDto) {
         Player player = Converter.convertToPlayer(playerDto);
-        Race race = raceRepository.findByName(playerDto.getRace().getName());
+
+        Race race = raceRepository.findByName(playerDto.getRaceDto().getName());
         player.setRace(race);
-        Profession profession = professionRepository.findByName(playerDto.getProfession().getName());
+
+        Profession profession = professionRepository.findByName(playerDto.getProfessionDto().getName());
         player.setProfession(profession);
+
         player.setLevel(calculateCurrentLevel(player.getExperience()));
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
         return playerRepository.save(player);
