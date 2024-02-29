@@ -53,15 +53,35 @@ public class PlayerServiceImpl implements PlayerService {
         return playerDao.getPlayersByFilter(filter);
     }
 
+    @Transactional
     @Override
     public Player updatePlayer(PlayerDto playerDto) {
-        Player player = Converter.convertToPlayer(playerDto);
-        if (player.getExperience() != null) {
-            player.setLevel(calculateCurrentLevel(player.getExperience()));
+        Player player = playerRepository.findById(playerDto.getId()).orElseThrow(PlayerNotFoundException::new);
+        if (playerDto.getName() != null) {
+            player.setName(playerDto.getName());
+        }
+        if (playerDto.getTitle() != null) {
+            player.setTitle(playerDto.getTitle());
+        }
+        if (playerDto.getRaceDto().getName() != null) {
+            player.setRace(raceRepository.findByName(playerDto.getRaceDto().getName()));
+        }
+        if (playerDto.getProfessionDto().getName() != null) {
+            player.setProfession(professionRepository.findByName(playerDto.getProfessionDto().getName()));
+        }
+        if (playerDto.getExperience() != null) {
+            player.setExperience(playerDto.getExperience());
+            player.setLevel(calculateCurrentLevel(playerDto.getExperience()));
             player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
         }
+        if (playerDto.getBirthday() != null) {
+            player.setBirthday(playerDto.getBirthday());
+        }
+        if (playerDto.getBanned() != null) {
+            player.setBanned(playerDto.getBanned());
+        }
 
-        return playerDao.updatePlayer(player);
+        return playerRepository.save(player);
     }
 
     @Override
