@@ -19,22 +19,25 @@ public class DateValidator implements ConstraintValidator<Date, java.util.Date> 
 
     @Override
     public boolean isValid(java.util.Date date, ConstraintValidatorContext constraintValidatorContext) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
-        java.util.Date afterDate;
-        try {
-            afterDate = format.parse(this.after);
-        } catch (ParseException e) {
-            log.error("В аннотации Date внесена некорректно заданная дата after {}", after);
-            throw new IllegalStateException(e);
-        }
-        java.util.Date beforeDate;
-        try {
-            beforeDate = format.parse(this.before);
-        } catch (ParseException e) {
-            log.error("В аннотации Date внесена некорректно заданная дата before {}", before);
-            throw new IllegalStateException(e);
-        }
+        if (date != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+            java.util.Date afterDate;
+            try {
+                afterDate = format.parse(this.after);
+            } catch (ParseException e) {
+                log.error("В аннотации Date внесена некорректно заданная дата after {}", after);
+                throw new IllegalStateException(e);
+            }
+            java.util.Date beforeDate;
+            try {
+                beforeDate = format.parse(this.before);
+            } catch (ParseException e) {
+                log.error("В аннотации Date внесена некорректно заданная дата before {}", before);
+                throw new IllegalStateException(e);
+            }
 
-        return date.after(afterDate) && date.before(beforeDate);
+            return date.after(afterDate) && date.before(beforeDate);
+        }
+        return true;
     }
 }

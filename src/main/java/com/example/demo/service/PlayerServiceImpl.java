@@ -43,8 +43,11 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player updatePlayer(PlayerDto playerDto) {
         Player player = Converter.convertToPlayer(playerDto);
-        player.setLevel(calculateCurrentLevel(player.getExperience()));
-        player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
+        if (player.getExperience() != null) {
+            player.setLevel(calculateCurrentLevel(player.getExperience()));
+            player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
+        }
+
         return playerDao.updatePlayer(player);
     }
 

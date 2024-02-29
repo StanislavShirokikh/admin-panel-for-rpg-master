@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.controller.validation.Marker;
 import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import com.example.demo.filter.PlayerOrder;
@@ -37,9 +38,11 @@ public interface PlayerController {
                                             @RequestParam(required = false) Integer maxLevel, @RequestParam(defaultValue = "ID") PlayerOrder order,
                                             @RequestParam(defaultValue = "0") Integer pageNumber, @RequestParam(defaultValue = "3") Integer pageSize);
 
+    @Validated(Marker.OnCreate.class)
     @PostMapping("rest/players")
     PlayerResponse createPlayer(@RequestBody @Valid PlayerRequest playerRequest);
 
+    @Validated(Marker.OnUpdate.class)
     @PostMapping("rest/players/{id}")
     PlayerResponse updatePlayer(@PathVariable @Min(0) long id,
                                 @RequestBody @Valid PlayerRequest playerRequest);
