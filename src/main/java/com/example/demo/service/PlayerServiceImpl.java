@@ -5,12 +5,16 @@ import com.example.demo.dao.PlayerDao;
 import com.example.demo.dao.repository.PlayerRepository;
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
+import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.filter.Filter;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +32,6 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = Converter.convertToPlayer(playerDto);
         player.setLevel(calculateCurrentLevel(player.getExperience()));
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
-
         return playerRepository.save(player);
     }
 
@@ -42,18 +45,24 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = Converter.convertToPlayer(playerDto);
         player.setLevel(calculateCurrentLevel(player.getExperience()));
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
-
         return playerDao.updatePlayer(player);
     }
 
     @Override
     public void deletePlayer(long id) {
-        playerDao.deletePlayer(id);
+        if (!playerRepository.existsById(id)) {
+            throw new PlayerNotFoundException();
+        }
+        playerRepository.deleteById(id);
     }
 
     @Override
     public Player getPlayerById(long id) {
-        return playerDao.getPlayerById(id);
+        Optional<Player> player = playerRepository.findById(id);
+        if (player.isEmpty()) {
+            throw new PlayerNotFoundException();
+        }
+        return player.get();
     }
 
     private int calculateCurrentLevel(int experience) {

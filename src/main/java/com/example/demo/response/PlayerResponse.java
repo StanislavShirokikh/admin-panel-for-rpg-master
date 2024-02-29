@@ -4,8 +4,6 @@ import com.example.demo.entity.Profession;
 import com.example.demo.entity.Race;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
 public class PlayerResponse {
     private Long id;
