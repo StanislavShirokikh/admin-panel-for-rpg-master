@@ -63,10 +63,7 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getPlayersByFilter(Filter filter) {
         Optional<Specification<Player>> specification = getSpecification(filter);
         PageRequest pageRequest = getPageRequest(filter);
-        if (specification.isEmpty()) {
-            return playerRepository.findAll(pageRequest).getContent();
-        }
-        return playerRepository.findAll(specification.get(), pageRequest).getContent();
+        return specification.map(playerSpecification -> playerRepository.findAll(playerSpecification, pageRequest).getContent()).orElseGet(() -> playerRepository.findAll(pageRequest).getContent());
     }
 
     @Transactional
