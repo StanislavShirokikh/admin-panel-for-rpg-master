@@ -2,14 +2,11 @@ package com.example.demo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
@@ -30,10 +27,10 @@ public class Player {
     private String title;
     @ManyToOne
     @JoinColumn(name = "race_id", nullable = false)
-    private Race race;
+    private RaceEntity raceEntity;
     @ManyToOne
     @JoinColumn(name = "profession_id", nullable = false)
-    private Profession profession;
+    private ProfessionEntity professionEntity;
     @Column(nullable = false)
     private Integer level;
     @Column(nullable = false)

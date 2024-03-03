@@ -5,7 +5,9 @@ import com.example.demo.dto.ProfessionDto;
 import com.example.demo.dto.RaceDto;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
+import com.example.demo.entity.ProfessionEntity;
 import com.example.demo.entity.Race;
+import com.example.demo.entity.RaceEntity;
 import com.example.demo.filter.Filter;
 import com.example.demo.filter.PlayerOrder;
 import com.example.demo.request.PlayerRequest;
@@ -21,8 +23,8 @@ public class Converter {
         player.setId(playerDto.getId());
         player.setName(playerDto.getName());
         player.setTitle(playerDto.getTitle());
-        player.setRace(Converter.convertToRace(playerDto.getRaceDto()));
-        player.setProfession(Converter.convertToProfession(playerDto.getProfessionDto()));
+        player.setRaceEntity(Converter.convertToRace(playerDto.getRaceDto()));
+        player.setProfessionEntity(Converter.convertToProfession(playerDto.getProfessionDto()));
         player.setExperience(playerDto.getExperience());
         player.setBirthday(playerDto.getBirthday());
         player.setBanned(playerDto.getBanned());
@@ -41,11 +43,11 @@ public class Converter {
         playerDto.setTitle(playerRequest.getTitle());
 
         RaceDto raceDto = new RaceDto();
-        raceDto.setName(playerRequest.getRace());
+        raceDto.setName(playerRequest.getRace().name());
         playerDto.setRaceDto(raceDto);
 
         ProfessionDto professionDto = new ProfessionDto();
-        professionDto.setName(playerRequest.getProfession());
+        professionDto.setName(playerRequest.getProfession().name());
         playerDto.setProfessionDto(professionDto);
 
         playerDto.setBirthday(playerRequest.getBirthday());
@@ -59,8 +61,8 @@ public class Converter {
         playerResponse.setId(player.getId());
         playerResponse.setName(player.getName());
         playerResponse.setTitle(player.getTitle());
-        playerResponse.setRace(player.getRace().getName());
-        playerResponse.setProfession(player.getProfession().getName());
+        playerResponse.setRace(player.getRaceEntity().getName());
+        playerResponse.setProfession(player.getProfessionEntity().getName());
         playerResponse.setLevel(player.getLevel());
         playerResponse.setExperience(player.getExperience());
         playerResponse.setUntilNextLevel(player.getUntilNextLevel());
@@ -101,15 +103,15 @@ public class Converter {
         return filter;
     }
 
-    public static Race convertToRace(RaceDto raceDto) {
-        Race race = new Race();
-        race.setName(raceDto.getName());
-        return race;
+    public static RaceEntity convertToRace(RaceDto raceDto) {
+        RaceEntity raceEntity = new RaceEntity();
+        raceEntity.setName(raceDto.getName());
+        return raceEntity;
     }
 
-    private static Profession convertToProfession(ProfessionDto professionDto) {
-        Profession profession = new Profession();
-        profession.setName(professionDto.getName());
-        return profession;
+    private static ProfessionEntity convertToProfession(ProfessionDto professionDto) {
+        ProfessionEntity professionEntity = new ProfessionEntity();
+        professionEntity.setName(professionDto.getName());
+        return professionEntity;
     }
 }

@@ -1,7 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
 import lombok.Data;
 
 import java.util.Date;

@@ -1,8 +1,8 @@
 package com.example.demo.dao.mappers;
 
 import com.example.demo.entity.Player;
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
+import com.example.demo.entity.ProfessionEntity;
+import com.example.demo.entity.RaceEntity;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -18,15 +18,15 @@ public class PlayerRowMapper implements RowMapper<Player> {
         player.setName(rs.getString("name"));
         player.setTitle(rs.getString("title"));
 
-        Race race = new Race();
-        race.setId(rs.getLong("race_id"));
-        race.setName(rs.getString("race_name"));
-        player.setRace(race);
+        RaceEntity raceEntity = new RaceEntity();
+        raceEntity.setId(rs.getLong("race_id"));
+        raceEntity.setName(rs.getString("race_name"));
+        player.setRaceEntity(raceEntity);
 
-        Profession profession = new Profession();
-        profession.setId(rs.getLong("profession_id"));
-        profession.setName(rs.getString("profession_name"));
-        player.setProfession(profession);
+        ProfessionEntity professionEntity = new ProfessionEntity();
+        professionEntity.setId(rs.getLong("profession_id"));
+        professionEntity.setName(rs.getString("profession_name"));
+        player.setProfessionEntity(professionEntity);
 
         player.setLevel(rs.getInt("level"));
         player.setExperience(rs.getInt("experience"));

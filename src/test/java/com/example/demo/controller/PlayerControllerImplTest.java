@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
+import com.example.demo.entity.ProfessionEntity;
+import com.example.demo.entity.RaceEntity;
 import com.example.demo.filter.Filter;
 import com.example.demo.filter.PlayerOrder;
 import com.example.demo.request.PlayerRequest;
@@ -52,11 +52,11 @@ class PlayerControllerImplTest {
 
     @BeforeEach
     void setUpPlayers() {
-        player1 = getCreatedPlayer("Юар", "Описание первого игрока", Race.ELF, Profession.CLERIC,
+        player1 = getCreatedPlayer("Юар", "Описание первого игрока", RaceEntity.ELF, ProfessionEntity.CLERIC,
                 parseDateFromString("22.01.2023"), true, 1);
-        player2 = getCreatedPlayer("Юг", "Описание второго игрока", Race.ELF, Profession.CLERIC,
+        player2 = getCreatedPlayer("Юг", "Описание второго игрока", RaceEntity.ELF, ProfessionEntity.CLERIC,
                 parseDateFromString("23.01.2023"), true, 2);
-        player3 = getCreatedPlayer("Юджин", "Описание третьего игрока", Race.ELF, Profession.CLERIC,
+        player3 = getCreatedPlayer("Юджин", "Описание третьего игрока", RaceEntity.ELF, ProfessionEntity.CLERIC,
                 parseDateFromString("24.01.2023"), true, 3);
     }
     @AfterEach
@@ -69,11 +69,11 @@ class PlayerControllerImplTest {
     @Test
     void getPlayersCountByFilter() throws Exception {
         Filter filter = new Filter();
-        filter.setRace(Race.HUMAN);
+        filter.setRace(RaceEntity.HUMAN);
         Integer playersCount = playerService.getPlayersCountByFilter(filter);
 
         mockMvc.perform(get("/rest/players/count")
-                        .param("race", String.valueOf(Race.HUMAN)))
+                        .param("race", String.valueOf(RaceEntity.HUMAN)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(String.valueOf(playersCount)));
     }
@@ -87,8 +87,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[0].id").value(player1.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юар"))
                 .andExpect(jsonPath("$[0].title").value("Описание первого игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("22.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(1))
@@ -98,8 +98,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[1].id").value(player2.getId()))
                 .andExpect(jsonPath("$[1].name").value("Юг"))
                 .andExpect(jsonPath("$[1].title").value("Описание второго игрока"))
-                .andExpect(jsonPath("$[1].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[1].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[1].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[1].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[1].birthday").value(parseDateFromString("23.01.2023")))
                 .andExpect(jsonPath("$[1].banned").value(true))
                 .andExpect(jsonPath("$[1].experience").value(2))
@@ -109,8 +109,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].id").value(player3.getId()))
                 .andExpect(jsonPath("$[2].name").value("Юджин"))
                 .andExpect(jsonPath("$[2].title").value("Описание третьего игрока"))
-                .andExpect(jsonPath("$[2].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[2].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[2].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[2].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[2].birthday").value(parseDateFromString("24.01.2023")))
                 .andExpect(jsonPath("$[2].banned").value(true))
                 .andExpect(jsonPath("$[2].experience").value(3))
@@ -135,8 +135,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[0].id").value(player1.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юар"))
                 .andExpect(jsonPath("$[0].title").value("Описание первого игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("22.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(1))
@@ -146,8 +146,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[1].id").value(player2.getId()))
                 .andExpect(jsonPath("$[1].name").value("Юг"))
                 .andExpect(jsonPath("$[1].title").value("Описание второго игрока"))
-                .andExpect(jsonPath("$[1].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[1].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[1].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[1].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[1].birthday").value(parseDateFromString("23.01.2023")))
                 .andExpect(jsonPath("$[1].banned").value(true))
                 .andExpect(jsonPath("$[1].experience").value(2))
@@ -157,8 +157,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].id").value(player3.getId()))
                 .andExpect(jsonPath("$[2].name").value("Юджин"))
                 .andExpect(jsonPath("$[2].title").value("Описание третьего игрока"))
-                .andExpect(jsonPath("$[2].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[2].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[2].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[2].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[2].birthday").value(parseDateFromString("24.01.2023")))
                 .andExpect(jsonPath("$[2].banned").value(true))
                 .andExpect(jsonPath("$[2].experience").value(3))
@@ -184,8 +184,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[0].id").value(player1.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юар"))
                 .andExpect(jsonPath("$[0].title").value("Описание первого игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("22.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(1))
@@ -195,8 +195,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[1].id").value(player2.getId()))
                 .andExpect(jsonPath("$[1].name").value("Юг"))
                 .andExpect(jsonPath("$[1].title").value("Описание второго игрока"))
-                .andExpect(jsonPath("$[1].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[1].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[1].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[1].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[1].birthday").value(parseDateFromString("23.01.2023")))
                 .andExpect(jsonPath("$[1].banned").value(true))
                 .andExpect(jsonPath("$[1].experience").value(2))
@@ -206,8 +206,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].id").value(player3.getId()))
                 .andExpect(jsonPath("$[2].name").value("Юджин"))
                 .andExpect(jsonPath("$[2].title").value("Описание третьего игрока"))
-                .andExpect(jsonPath("$[2].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[2].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[2].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[2].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[2].birthday").value(parseDateFromString("24.01.2023")))
                 .andExpect(jsonPath("$[2].banned").value(true))
                 .andExpect(jsonPath("$[2].experience").value(3))
@@ -220,14 +220,14 @@ class PlayerControllerImplTest {
         mockMvc.perform(get("/rest/players")
                         .param("name", "Ю")
                         .param("title", "Описание")
-                        .param("race", String.valueOf(Race.ELF)))
+                        .param("race", String.valueOf(RaceEntity.ELF)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(3))
                 .andExpect(jsonPath("$[0].id").value(player1.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юар"))
                 .andExpect(jsonPath("$[0].title").value("Описание первого игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("22.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(1))
@@ -237,8 +237,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[1].id").value(player2.getId()))
                 .andExpect(jsonPath("$[1].name").value("Юг"))
                 .andExpect(jsonPath("$[1].title").value("Описание второго игрока"))
-                .andExpect(jsonPath("$[1].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[1].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[1].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[1].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[1].birthday").value(parseDateFromString("23.01.2023")))
                 .andExpect(jsonPath("$[1].banned").value(true))
                 .andExpect(jsonPath("$[1].experience").value(2))
@@ -248,8 +248,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].id").value(player3.getId()))
                 .andExpect(jsonPath("$[2].name").value("Юджин"))
                 .andExpect(jsonPath("$[2].title").value("Описание третьего игрока"))
-                .andExpect(jsonPath("$[2].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[2].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[2].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[2].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[2].birthday").value(parseDateFromString("24.01.2023")))
                 .andExpect(jsonPath("$[2].banned").value(true))
                 .andExpect(jsonPath("$[2].experience").value(3))
@@ -262,15 +262,15 @@ class PlayerControllerImplTest {
         mockMvc.perform(get("/rest/players")
                         .param("name", "Ю")
                         .param("title", "Описание")
-                        .param("race", String.valueOf(Race.ELF))
-                        .param("profession", String.valueOf(Profession.CLERIC)))
+                        .param("race", String.valueOf(RaceEntity.ELF))
+                        .param("profession", String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(3))
                 .andExpect(jsonPath("$[0].id").value(player1.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юар"))
                 .andExpect(jsonPath("$[0].title").value("Описание первого игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("22.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(1))
@@ -280,8 +280,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[1].id").value(player2.getId()))
                 .andExpect(jsonPath("$[1].name").value("Юг"))
                 .andExpect(jsonPath("$[1].title").value("Описание второго игрока"))
-                .andExpect(jsonPath("$[1].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[1].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[1].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[1].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[1].birthday").value(parseDateFromString("23.01.2023")))
                 .andExpect(jsonPath("$[1].banned").value(true))
                 .andExpect(jsonPath("$[1].experience").value(2))
@@ -291,8 +291,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].id").value(player3.getId()))
                 .andExpect(jsonPath("$[2].name").value("Юджин"))
                 .andExpect(jsonPath("$[2].title").value("Описание третьего игрока"))
-                .andExpect(jsonPath("$[2].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[2].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[2].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[2].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[2].birthday").value(parseDateFromString("24.01.2023")))
                 .andExpect(jsonPath("$[2].banned").value(true))
                 .andExpect(jsonPath("$[2].experience").value(3))
@@ -305,8 +305,8 @@ class PlayerControllerImplTest {
         mockMvc.perform(get("/rest/players")
                         .param("name", "Ю")
                         .param("title", "Описание")
-                        .param("race", String.valueOf(Race.ELF))
-                        .param("profession", String.valueOf(Profession.DRUID)))
+                        .param("race", String.valueOf(RaceEntity.ELF))
+                        .param("profession", String.valueOf(ProfessionEntity.DRUID)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(0));
     }
@@ -320,8 +320,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[0].id").value(player1.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юар"))
                 .andExpect(jsonPath("$[0].title").value("Описание первого игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("22.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(1))
@@ -331,8 +331,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[1].id").value(player2.getId()))
                 .andExpect(jsonPath("$[1].name").value("Юг"))
                 .andExpect(jsonPath("$[1].title").value("Описание второго игрока"))
-                .andExpect(jsonPath("$[1].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[1].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[1].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[1].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[1].birthday").value(parseDateFromString("23.01.2023")))
                 .andExpect(jsonPath("$[1].banned").value(true))
                 .andExpect(jsonPath("$[1].experience").value(2))
@@ -342,8 +342,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].id").value(player3.getId()))
                 .andExpect(jsonPath("$[2].name").value("Юджин"))
                 .andExpect(jsonPath("$[2].title").value("Описание третьего игрока"))
-                .andExpect(jsonPath("$[2].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[2].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[2].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[2].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[2].birthday").value(parseDateFromString("24.01.2023")))
                 .andExpect(jsonPath("$[2].banned").value(true))
                 .andExpect(jsonPath("$[2].experience").value(3))
@@ -362,8 +362,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[0].id").value(player1.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юар"))
                 .andExpect(jsonPath("$[0].title").value("Описание первого игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("22.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(1))
@@ -379,8 +379,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[0].id").value(player2.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юг"))
                 .andExpect(jsonPath("$[0].title").value("Описание второго игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("23.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(2))
@@ -396,8 +396,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[0].id").value(player3.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юджин"))
                 .andExpect(jsonPath("$[0].title").value("Описание третьего игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("24.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(3))
@@ -415,8 +415,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[0].id").value(player1.getId()))
                 .andExpect(jsonPath("$[0].name").value("Юар"))
                 .andExpect(jsonPath("$[0].title").value("Описание первого игрока"))
-                .andExpect(jsonPath("$[0].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[0].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[0].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[0].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[0].birthday").value(parseDateFromString("22.01.2023")))
                 .andExpect(jsonPath("$[0].banned").value(true))
                 .andExpect(jsonPath("$[0].experience").value(1))
@@ -426,8 +426,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[1].id").value(player2.getId()))
                 .andExpect(jsonPath("$[1].name").value("Юг"))
                 .andExpect(jsonPath("$[1].title").value("Описание второго игрока"))
-                .andExpect(jsonPath("$[1].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[1].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[1].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[1].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[1].birthday").value(parseDateFromString("23.01.2023")))
                 .andExpect(jsonPath("$[1].banned").value(true))
                 .andExpect(jsonPath("$[1].experience").value(2))
@@ -437,8 +437,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$[2].id").value(player3.getId()))
                 .andExpect(jsonPath("$[2].name").value("Юджин"))
                 .andExpect(jsonPath("$[2].title").value("Описание третьего игрока"))
-                .andExpect(jsonPath("$[2].race").value(String.valueOf(Race.ELF)))
-                .andExpect(jsonPath("$[2].profession").value(String.valueOf(Profession.CLERIC)))
+                .andExpect(jsonPath("$[2].race").value(String.valueOf(RaceEntity.ELF)))
+                .andExpect(jsonPath("$[2].profession").value(String.valueOf(ProfessionEntity.CLERIC)))
                 .andExpect(jsonPath("$[2].birthday").value(parseDateFromString("24.01.2023")))
                 .andExpect(jsonPath("$[2].banned").value(true))
                 .andExpect(jsonPath("$[2].experience").value(3))
@@ -451,8 +451,8 @@ class PlayerControllerImplTest {
         PlayerRequest playerRequest = new PlayerRequest();
         playerRequest.setName("Adam");
         playerRequest.setTitle("Magic");
-        playerRequest.setRace(Race.HUMAN);
-        playerRequest.setProfession(Profession.DRUID);
+        playerRequest.setRace(RaceEntity.HUMAN);
+        playerRequest.setProfession(ProfessionEntity.DRUID);
         playerRequest.setBirthday(new Date());//20.03.2012
         playerRequest.setBanned(false);
         playerRequest.setExperience(1000);
@@ -480,8 +480,8 @@ class PlayerControllerImplTest {
         Player player = playerService.getPlayerById(id);
         assertEquals(playerRequest.getName(), player.getName());
         assertEquals(playerRequest.getTitle(), player.getTitle());
-        assertEquals(playerRequest.getRace(), player.getRace());
-        assertEquals(playerRequest.getProfession(), player.getProfession());
+        assertEquals(playerRequest.getRace(), player.getRaceEntity());
+        assertEquals(playerRequest.getProfession(), player.getProfessionEntity());
         assertEquals(playerRequest.getBirthday(), player.getBirthday());
         assertEquals(playerRequest.getBanned(), player.getBanned());
         assertEquals(playerRequest.getExperience(), player.getExperience());
@@ -494,8 +494,8 @@ class PlayerControllerImplTest {
         PlayerRequest playerRequest = new PlayerRequest();
         playerRequest.setName(null);
         playerRequest.setTitle("Magic");
-        playerRequest.setRace(Race.HUMAN);
-        playerRequest.setProfession(Profession.DRUID);
+        playerRequest.setRace(RaceEntity.HUMAN);
+        playerRequest.setProfession(ProfessionEntity.DRUID);
         playerRequest.setBirthday(new Date(1332226800000L));//20.03.2012
         playerRequest.setBanned(false);
         playerRequest.setExperience(1000);
@@ -512,8 +512,8 @@ class PlayerControllerImplTest {
         PlayerRequest playerRequest = new PlayerRequest();
         playerRequest.setName("Adam");
         playerRequest.setTitle("Magicdfdfgdfgdfgdfgdfgdfgdfdfgdfdfgdfgdfgd");
-        playerRequest.setRace(Race.HUMAN);
-        playerRequest.setProfession(Profession.DRUID);
+        playerRequest.setRace(RaceEntity.HUMAN);
+        playerRequest.setProfession(ProfessionEntity.DRUID);
         playerRequest.setBirthday(new Date(1332226800000L));//20.03.2012
         playerRequest.setBanned(false);
         playerRequest.setExperience(1000);
@@ -530,8 +530,8 @@ class PlayerControllerImplTest {
         PlayerRequest playerRequest = new PlayerRequest();
         playerRequest.setName("Peter");
         playerRequest.setTitle("Magic");
-        playerRequest.setRace(Race.HUMAN);
-        playerRequest.setProfession(Profession.DRUID);
+        playerRequest.setRace(RaceEntity.HUMAN);
+        playerRequest.setProfession(ProfessionEntity.DRUID);
         playerRequest.setBanned(false);
         playerRequest.setExperience(1000);
 
@@ -547,8 +547,8 @@ class PlayerControllerImplTest {
         PlayerDto playerDto = new PlayerDto();
         playerDto.setName("Adam");
         playerDto.setTitle("Magic");
-        playerDto.setRace(Race.HUMAN);
-        playerDto.setProfession(Profession.DRUID);
+        playerDto.setRace(RaceEntity.HUMAN);
+        playerDto.setProfession(ProfessionEntity.DRUID);
         playerDto.setBirthday(new Date(1332216800000L));//20.03.2012
         playerDto.setBanned(false);
         playerDto.setExperience(10000);
@@ -592,8 +592,8 @@ class PlayerControllerImplTest {
         PlayerDto playerDto = new PlayerDto();
         playerDto.setName("Adam");
         playerDto.setTitle("Magic");
-        playerDto.setRace(Race.HUMAN);
-        playerDto.setProfession(Profession.DRUID);
+        playerDto.setRace(RaceEntity.HUMAN);
+        playerDto.setProfession(ProfessionEntity.DRUID);
         playerDto.setBirthday(new Date());
         playerDto.setBanned(false);
         playerDto.setExperience(10000);
@@ -604,8 +604,8 @@ class PlayerControllerImplTest {
         playerRequest.setName("Scott");
         playerRequest.setTitle("Speed");
         playerRequest.setExperience(1000);
-        playerRequest.setRace(Race.ELF);
-        playerRequest.setProfession(Profession.CLERIC);
+        playerRequest.setRace(RaceEntity.ELF);
+        playerRequest.setProfession(ProfessionEntity.CLERIC);
         playerRequest.setBanned(true);
 
         mockMvc.perform(post("/rest/players/{id}", player.getId())
@@ -629,8 +629,8 @@ class PlayerControllerImplTest {
         PlayerDto playerDto = new PlayerDto();
         playerDto.setName("Adam");
         playerDto.setTitle("Magic");
-        playerDto.setRace(Race.HUMAN);
-        playerDto.setProfession(Profession.DRUID);
+        playerDto.setRace(RaceEntity.HUMAN);
+        playerDto.setProfession(ProfessionEntity.DRUID);
         playerDto.setBirthday(new Date(1332216800000L));//20.03.2012
         playerDto.setBanned(false);
         playerDto.setExperience(10000);
@@ -648,8 +648,8 @@ class PlayerControllerImplTest {
         PlayerDto playerDto = new PlayerDto();
         playerDto.setName("Adam");
         playerDto.setTitle("Magic");
-        playerDto.setRace(Race.HUMAN);
-        playerDto.setProfession(Profession.DRUID);
+        playerDto.setRace(RaceEntity.HUMAN);
+        playerDto.setProfession(ProfessionEntity.DRUID);
         playerDto.setBirthday(new Date());
         playerDto.setBanned(false);
         playerDto.setExperience(1000);
@@ -662,8 +662,8 @@ class PlayerControllerImplTest {
                 .andExpect(jsonPath("$.id").value(player.getId()))
                 .andExpect(jsonPath("$.name").value(player.getName()))
                 .andExpect(jsonPath("$.title").value(player.getTitle()))
-                .andExpect(jsonPath("$.race").value(String.valueOf(player.getRace())))
-                .andExpect(jsonPath("$.profession").value(String.valueOf(player.getProfession())))
+                .andExpect(jsonPath("$.race").value(String.valueOf(player.getRaceEntity())))
+                .andExpect(jsonPath("$.profession").value(String.valueOf(player.getProfessionEntity())))
                 .andExpect(jsonPath("$.birthday").value(player.getBirthday()))
                 .andExpect(jsonPath("$.experience").value(player.getExperience()))
                 .andExpect(jsonPath("$.banned").value(player.getBanned()))
@@ -689,13 +689,13 @@ class PlayerControllerImplTest {
         return date;
     }
 
-    Player getCreatedPlayer(String name, String title, Race race, Profession profession, Date birthday,
-                                 boolean banned, int experience) {
+    Player getCreatedPlayer(String name, String title, RaceEntity raceEntity, ProfessionEntity professionEntity, Date birthday,
+                            boolean banned, int experience) {
         PlayerDto playerDto = new PlayerDto();
         playerDto.setName(name);
         playerDto.setTitle(title);
-        playerDto.setRace(race);
-        playerDto.setProfession(profession);
+        playerDto.setRace(raceEntity);
+        playerDto.setProfession(professionEntity);
         playerDto.setBirthday(birthday);
         playerDto.setBanned(banned);
         playerDto.setExperience(experience);

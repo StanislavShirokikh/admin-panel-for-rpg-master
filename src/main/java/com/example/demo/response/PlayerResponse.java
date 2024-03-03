@@ -1,7 +1,5 @@
 package com.example.demo.response;
 
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
 import lombok.Data;
 
 @Data

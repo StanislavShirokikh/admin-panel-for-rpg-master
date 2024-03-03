@@ -1,14 +1,14 @@
 DROP TABLE IF EXISTS player;
-DROP TABLE IF EXISTS race;
-DROP TABLE IF EXISTS profession;
+DROP TABLE IF EXISTS raceEntity;
+DROP TABLE IF EXISTS professionEntity;
 
-CREATE TABLE race
+CREATE TABLE raceEntity
 (
     id   SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL
 );
 
-CREATE TABLE profession
+CREATE TABLE professionEntity
 (
     id  SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL
@@ -19,16 +19,16 @@ CREATE TABLE player
     id             SERIAL PRIMARY KEY,
     name           VARCHAR(12) NOT NULL,
     title          VARCHAR(30) NULL,
-    race_id        INTEGER REFERENCES race(id),
+    race_id        INTEGER REFERENCES raceEntity(id),
     experience     INTEGER     CHECK ( 0 < experience AND experience <= 10000000 ),
-    profession_id     INTEGER REFERENCES profession(id),
+    profession_id     INTEGER REFERENCES professionEntity(id),
     level          INTEGER check ( 0 <= level ) NOT NULL,
     until_next_level INTEGER NOT NULL,
     birthday       TIMESTAMP NOT NULL,
     banned         BOOLEAN NOT NULL
 );
 
-INSERT INTO race(name)
+INSERT INTO raceEntity(name)
 VALUES
        ('HUMAN'),
        ('DWARF'),
@@ -38,7 +38,7 @@ VALUES
        ('TROLL'),
        ('HOBBIT');
 
-INSERT INTO profession(name)
+INSERT INTO professionEntity(name)
 VALUES ('WARRIOR'),
        ('ROGUE'),
        ('SORCERER'),

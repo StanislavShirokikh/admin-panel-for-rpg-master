@@ -6,6 +6,8 @@ import com.example.demo.entity.Race;
 import com.example.demo.filter.PlayerOrder;
 import com.example.demo.request.PlayerRequest;
 import com.example.demo.response.PlayerResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import java.util.List;
 @Validated
 public interface PlayerController {
@@ -39,7 +39,7 @@ public interface PlayerController {
                                             @RequestParam(defaultValue = "0") Integer pageNumber, @RequestParam(defaultValue = "3") Integer pageSize);
 
     @Validated(Marker.OnCreate.class)
-    @PostMapping("rest/players")
+    @PostMapping("rest/players/")
     PlayerResponse createPlayer(@RequestBody @Valid PlayerRequest playerRequest);
 
     @Validated(Marker.OnUpdate.class)

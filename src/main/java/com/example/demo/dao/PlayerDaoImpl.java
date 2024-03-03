@@ -2,8 +2,8 @@ package com.example.demo.dao;
 
 import com.example.demo.dao.mappers.PlayerRowMapper;
 import com.example.demo.entity.Player;
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
+import com.example.demo.entity.ProfessionEntity;
+import com.example.demo.entity.RaceEntity;
 import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.filter.Filter;
 import lombok.extern.slf4j.Slf4j;
@@ -60,8 +60,8 @@ public class PlayerDaoImpl implements PlayerDao{
         Map<String, Object> map = new HashMap<>() {{
             put("name", player.getName());
             put("title", player.getTitle());
-            put("race_id", getRaceIdByName(player.getRace()));
-            put("profession_id", getProfessionIdByName(player.getProfession()));
+            put("race_id", getRaceIdByName(player.getRaceEntity()));
+            put("profession_id", getProfessionIdByName(player.getProfessionEntity()));
             put("level", player.getLevel());
             put("experience", player.getExperience());
             put("until_next_level", player.getUntilNextLevel());
@@ -97,13 +97,13 @@ public class PlayerDaoImpl implements PlayerDao{
             clauses.add("title = ?");
             values.add(player.getTitle());
         }
-        if (player.getRace() != null) {
+        if (player.getRaceEntity() != null) {
             clauses.add("race_id = (SELECT id FROM race WHERE name = ?)");
-            values.add(player.getRace().getName());
+            values.add(player.getRaceEntity().getName());
         }
-        if (player.getProfession() != null) {
+        if (player.getProfessionEntity() != null) {
             clauses.add("profession_id = (SELECT id FROM profession WHERE name = ?)");
-            values.add(player.getProfession().getName());
+            values.add(player.getProfessionEntity().getName());
         }
         if (player.getBirthday() != null) {
             clauses.add("birthday = ?");
@@ -163,14 +163,14 @@ public class PlayerDaoImpl implements PlayerDao{
         return player;
     }
 
-    private Integer getRaceIdByName(Race race) {
+    private Integer getRaceIdByName(RaceEntity raceEntity) {
         String sql1 = "SELECT id FROM race WHERE name=?";
-        return jdbcTemplate.queryForObject(sql1, Integer.class, String.valueOf(race));
+        return jdbcTemplate.queryForObject(sql1, Integer.class, String.valueOf(raceEntity));
     }
 
-    private Integer getProfessionIdByName(Profession profession) {
+    private Integer getProfessionIdByName(ProfessionEntity professionEntity) {
         String sql2 = "SELECT id FROM profession WHERE name=?";
-        return jdbcTemplate.queryForObject(sql2, Integer.class, String.valueOf(profession));
+        return jdbcTemplate.queryForObject(sql2, Integer.class, String.valueOf(professionEntity));
     }
 
     private List<Player> getPlayersListWithSqlOption(Filter filter) {
