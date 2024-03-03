@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.converter.Converter;
-import com.example.demo.dao.PlayerDao;
 import com.example.demo.dao.repository.PlayerRepository;
 import com.example.demo.dao.repository.ProfessionRepository;
 import com.example.demo.dao.repository.RaceRepository;
@@ -29,7 +28,6 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Slf4j
 public class PlayerServiceImpl implements PlayerService {
-    private final PlayerDao playerDao;
     private final PlayerRepository playerRepository;
     private final RaceRepository raceRepository;
     private final ProfessionRepository professionRepository;
