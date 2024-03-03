@@ -42,13 +42,17 @@ public class Converter {
         playerDto.setName(playerRequest.getName());
         playerDto.setTitle(playerRequest.getTitle());
 
-        RaceDto raceDto = new RaceDto();
-        raceDto.setName(playerRequest.getRace().name());
-        playerDto.setRaceDto(raceDto);
+        if (playerRequest.getRace() != null) {
+            RaceDto raceDto = new RaceDto();
+            raceDto.setName(playerRequest.getRace().name());
+            playerDto.setRaceDto(raceDto);
+        }
 
-        ProfessionDto professionDto = new ProfessionDto();
-        professionDto.setName(playerRequest.getProfession().name());
-        playerDto.setProfessionDto(professionDto);
+        if (playerRequest.getProfession() != null) {
+            ProfessionDto professionDto = new ProfessionDto();
+            professionDto.setName(playerRequest.getProfession().name());
+            playerDto.setProfessionDto(professionDto);
+        }
 
         playerDto.setBirthday(playerRequest.getBirthday());
         playerDto.setExperience(playerRequest.getExperience());

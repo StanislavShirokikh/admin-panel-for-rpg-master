@@ -65,25 +65,27 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getPlayersByFilter(Filter filter) {
         Optional<Specification<Player>> specification = getSpecification(filter);
         PageRequest pageRequest = getPageRequest(filter);
-
-        return specification.map(playerSpecification -> playerRepository.findAll(playerSpecification, pageRequest).getContent())
-                .orElseGet(() -> playerRepository.findAll(pageRequest).getContent());
+        if (specification.isEmpty()) {
+            return playerRepository.findAll(pageRequest).getContent();
+        }
+        return playerRepository.findAll(specification.get(), pageRequest).getContent();
     }
 
     @Transactional
     @Override
     public Player updatePlayer(PlayerDto playerDto) {
         Player player = playerRepository.findById(playerDto.getId()).orElseThrow(PlayerNotFoundException::new);
+
         if (playerDto.getName() != null) {
             player.setName(playerDto.getName());
         }
         if (playerDto.getTitle() != null) {
             player.setTitle(playerDto.getTitle());
         }
-        if (playerDto.getRaceDto().getName() != null) {
+        if (playerDto.getRaceDto() != null) {
             player.setRaceEntity(raceRepository.findByName(playerDto.getRaceDto().getName()));
         }
-        if (playerDto.getProfessionDto().getName() != null) {
+        if (playerDto.getProfessionDto() != null) {
             player.setProfessionEntity(professionRepository.findByName(playerDto.getProfessionDto().getName()));
         }
         if (playerDto.getExperience() != null) {
@@ -146,14 +148,19 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         Specification<Player> playerSpecification = Specification.where(specificationList.get(0));
-        for (int i = 1; i < specificationList.size(); i++) {
+        for (int i = 0; i < specificationList.size(); i++) {
             playerSpecification = playerSpecification.and(specificationList.get(i));
         }
 
         return Optional.of(playerSpecification);
     }
     private PageRequest getPageRequest(Filter filter) {
-        return PageRequest.of(filter.getPageNumber(), filter.getPageSize(), Sort.Direction.ASC,
+        if (filter.getPageNumber() == 1 || filter.getPageNumber() == 0) {
+            return PageRequest.of(0, filter.getPageSize(), Sort.Direction.ASC,
+                    String.valueOf(filter.getOrder()).toLowerCase());
+
+        }
+        return PageRequest.of(filter.getPageNumber() - 1, filter.getPageSize(), Sort.Direction.ASC,
                 String.valueOf(filter.getOrder()).toLowerCase());
     }
 }

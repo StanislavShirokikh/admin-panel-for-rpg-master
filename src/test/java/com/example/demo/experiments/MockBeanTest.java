@@ -2,8 +2,12 @@ package com.example.demo.experiments;
 
 import com.example.demo.dao.PlayerDao;
 import com.example.demo.dto.PlayerDto;
+import com.example.demo.dto.ProfessionDto;
+import com.example.demo.dto.RaceDto;
 import com.example.demo.entity.Player;
+import com.example.demo.entity.Profession;
 import com.example.demo.entity.ProfessionEntity;
+import com.example.demo.entity.Race;
 import com.example.demo.entity.RaceEntity;
 import com.example.demo.service.PlayerServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -34,8 +38,15 @@ public class MockBeanTest {
         PlayerDto playerDto = new PlayerDto();
         playerDto.setName("name");
         playerDto.setTitle("title");
-        playerDto.setRace(RaceEntity.HUMAN);
-        playerDto.setProfession(ProfessionEntity.DRUID);
+
+        RaceDto raceDto = new RaceDto();
+        raceDto.setName(Race.HUMAN.name());
+        playerDto.setRaceDto(raceDto);
+
+        ProfessionDto professionDto = new ProfessionDto();
+        professionDto.setName(Profession.DRUID.name());
+        playerDto.setProfessionDto(professionDto);
+
         playerDto.setBirthday(new Date());
         playerDto.setBanned(true);
         playerDto.setExperience(123);

@@ -28,7 +28,7 @@ public class PlayerSpecification  {
             return null;
         }
         return ((root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("name"), "%" + title + "%"));
+                criteriaBuilder.like(root.get("title"), "%" + title + "%"));
     }
     public static Specification<Player> equalsRaceName (Race race) {
         if (race == null) {
