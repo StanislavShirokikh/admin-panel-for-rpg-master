@@ -14,7 +14,6 @@ import lombok.Data;
 public class Profession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false)
+    private Integer id;
     private String name;
 }

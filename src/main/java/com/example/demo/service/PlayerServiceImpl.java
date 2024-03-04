@@ -52,12 +52,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<Player> getPlayersByFilter(Filter filter) {
-        Pageable pageable = PageRequest.of(0, filter.getPageSize(), Sort.Direction.ASC,
-                filter.getOrder().getFieldName());;
-        if (filter.getPageNumber() > 1) {
-            pageable = PageRequest.of(filter.getPageNumber() - 1, filter.getPageSize(), Sort.Direction.ASC,
-                    filter.getOrder().getFieldName());
-        }
+        Pageable pageable = PageRequest.of(filter.getPageNumber() > 1 ? filter.getPageNumber() - 1 : 0,
+                filter.getPageSize(), Sort.Direction.ASC, filter.getOrder().getFieldName());
         return playerRepository.findAll(new PlayerSpecification(filter), pageable).getContent();
     }
 

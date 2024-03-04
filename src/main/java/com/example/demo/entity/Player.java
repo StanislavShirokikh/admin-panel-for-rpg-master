@@ -22,10 +22,10 @@ public class Player {
     private String name;
     private String title;
     @ManyToOne
-    @JoinColumn(name = "race_id", nullable = false)
+    @JoinColumn(name = "race_id")
     private Race race;
     @ManyToOne
-    @JoinColumn(name = "profession_id", nullable = false)
+    @JoinColumn(name = "profession_id")
     private Profession profession;
     private Integer level;
     private Integer experience;
