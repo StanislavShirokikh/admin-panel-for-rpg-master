@@ -1,8 +1,6 @@
 package com.example.demo.request;
 
 import com.example.demo.controller.validation.Marker;
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
 import lombok.Data;
 
 import jakarta.validation.constraints.Max;
@@ -23,9 +21,9 @@ public class PlayerRequest {
     @Size(max = 30, groups = Marker.OnUpdate.class)
     private String title;
     @NotNull(groups = Marker.OnCreate.class)
-    private Race race;
+    private String race;
     @NotNull(groups = Marker.OnCreate.class)
-    private Profession profession;
+    private String profession;
     @NotNull(groups = Marker.OnCreate.class)
     @com.example.demo.controller.validation.Date(after = "2000.01.01", before = "3000.12.31")
     private Date birthday;

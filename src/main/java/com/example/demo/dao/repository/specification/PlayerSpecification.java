@@ -2,94 +2,64 @@ package com.example.demo.dao.repository.specification;
 
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Profession;
-import com.example.demo.entity.ProfessionEntity;
 import com.example.demo.entity.Race;
-import com.example.demo.entity.RaceEntity;
+import com.example.demo.filter.Filter;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.util.StringUtils.hasText;
+@RequiredArgsConstructor
+public class PlayerSpecification implements Specification<Player> {
+    private final Filter filter;
 
-@NoArgsConstructor
-public class PlayerSpecification  {
-    public static Specification<Player> nameLike (String name) {
-        if (name == null || name.isEmpty()) {
-            return null;
+    @Override
+    public Predicate toPredicate(Root<Player> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+        List<Predicate> predicates = new ArrayList<>();
+        if (hasText(filter.getName())) {
+        predicates.add(criteriaBuilder.like(root.get("name"), "%" + filter.getName() + "%"));
         }
-        return ((root, query, criteriaBuilder) ->
-            criteriaBuilder.like(root.get("name"), "%" + name + "%"));
-    }
-    public static Specification<Player> titleLike (String title) {
-        if (!hasText(title)) {
-            return null;
+        if (hasText(filter.getTitle())) {
+            predicates.add(criteriaBuilder.like(root.get("title"), "%" + filter.getTitle() + "%"));
         }
-        return ((root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("title"), "%" + title + "%"));
-    }
-    public static Specification<Player> equalsRaceName (Race race) {
-        if (race == null) {
-            return null;
+        if (hasText(filter.getRace())) {
+            Join<Player, Race> raceJoin = root.join("race", JoinType.INNER);
+            predicates.add(criteriaBuilder.equal(raceJoin.get("name"), filter.getRace()));
         }
-        return ((root, query, criteriaBuilder) -> {
-            Join<Player, RaceEntity> raceJoin = root.join("raceEntity", JoinType.INNER);
-            return criteriaBuilder.equal(raceJoin.get("name"), String.valueOf(race));
-        });
-    }
-    public static Specification<Player> equalsProfessionName (Profession profession) {
-        if (profession == null) {
-            return null;
+        if (hasText(filter.getProfession())) {
+            Join<Player, Profession> raceJoin = root.join("profession", JoinType.INNER);
+            predicates.add(criteriaBuilder.equal(raceJoin.get("name"), filter.getProfession()));
         }
-        return ((root, query, criteriaBuilder) -> {
-            Join<Player, ProfessionEntity> raceJoin = root.join("professionEntity", JoinType.INNER);
-            return criteriaBuilder.equal(raceJoin.get("name"), String.valueOf(profession));
-        });
-    }
-    public static Specification<Player> greaterThanOrEqualToBeforeDate (Date before) {
-        if (before == null) {
-            return null;
+        if (filter.getBefore() != null) {
+               predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), filter.getBefore()));
         }
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), before));
-    }
-    public static Specification<Player> lessThanOrEqualToAfterDate (Date after) {
-        if (after == null) {
-            return null;
+        if (filter.getAfter() != null) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), filter.getAfter()));
         }
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), after));
-    }
-    public static Specification<Player> equalsBanned (Boolean banned) {
-        if (banned == null) {
-            return null;
+        if (filter.getBanned() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("banned"), filter.getBanned()));
         }
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("banned"), banned));
-    }
-    public static Specification<Player>  greaterThanOrEqualToMinExperience(Integer minExperience) {
-        if (minExperience == null) {
-            return null;
+        if (filter.getMinExperience() != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("experience"), filter.getMinExperience()));
         }
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("experience"), minExperience));
-    }
-    public static Specification<Player> lessThanOrEqualToMaxExperience(Integer maxExperience) {
-        if (maxExperience == null) {
-            return null;
+        if (filter.getMaxExperience() != null) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("experience"), filter.getMaxExperience()));
         }
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("experience"), maxExperience));
+        if (filter.getMinLevel() != null) {
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("level"), filter.getMinLevel()));
+        }
+        if (filter.getMaxLevel() != null) {
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("level"), filter.getMaxLevel()));
+        }
 
-    }
-    public static Specification<Player> greaterThanOrEqualToMinLevel(Integer minLevel) {
-        if (minLevel == null) {
-            return null;
-        }
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("level"), minLevel));
-
-    }
-    public static Specification<Player> lessThanOrEqualToMaxLevel(Integer maxLevel) {
-        if (maxLevel == null) {
-            return null;
-        }
-        return ((root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("level"), maxLevel));
+        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }

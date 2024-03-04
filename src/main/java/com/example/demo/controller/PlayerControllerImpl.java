@@ -3,8 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.converter.Converter;
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
 import com.example.demo.filter.Filter;
 import com.example.demo.filter.PlayerOrder;
 import com.example.demo.request.PlayerRequest;
@@ -22,7 +20,7 @@ public class PlayerControllerImpl implements PlayerController{
     private final PlayerService playerService;
 
     @Override
-    public Integer getPlayersCountByFilter(String name, String title, Race race, Profession profession, Long after,
+    public Integer getPlayersCountByFilter(String name, String title, String race, String profession, Long after,
                                            Long before, Boolean banned, Integer minExperience, Integer maxExperience, Integer minLevel, Integer maxLevel) {
         Filter filter = Converter.convertToFilter(name, title, race, profession, after, before, banned,
                 minExperience, maxExperience, minLevel, maxLevel, null, null, null);
@@ -38,7 +36,7 @@ public class PlayerControllerImpl implements PlayerController{
     }
 
     @Override
-    public List<PlayerResponse> getPlayersByFilter(String name, String title, Race race, Profession profession,
+    public List<PlayerResponse> getPlayersByFilter(String name, String title, String race, String profession,
                                                    Long after, Long before, Boolean banned, Integer minExperience, Integer maxExperience,
                                                    Integer minLevel, Integer maxLevel, PlayerOrder order, Integer pageNumber,
                                                    Integer pageSize) {
@@ -48,7 +46,6 @@ public class PlayerControllerImpl implements PlayerController{
 
         return Converter.convertToListPlayerResponse(players);
     }
-
     @Override
     public PlayerResponse updatePlayer(long id, PlayerRequest playerRequest) {
         PlayerDto playerDto = Converter.convertToPlayerDto(playerRequest, id);

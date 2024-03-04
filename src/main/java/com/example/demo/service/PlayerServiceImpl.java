@@ -7,22 +7,19 @@ import com.example.demo.dao.repository.RaceRepository;
 import com.example.demo.dao.repository.specification.PlayerSpecification;
 import com.example.demo.dto.PlayerDto;
 import com.example.demo.entity.Player;
-import com.example.demo.entity.ProfessionEntity;
-import com.example.demo.entity.RaceEntity;
+import com.example.demo.entity.Profession;
+import com.example.demo.entity.Race;
 import com.example.demo.exceptions.PlayerNotFoundException;
 import com.example.demo.filter.Filter;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,24 +31,18 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Integer getPlayersCountByFilter(Filter filter) {
-        Optional<Specification<Player>> optional = getSpecification(filter);
-        Specification<Player> specification = Specification.where(null);
-        if (optional.isPresent()) {
-            specification = optional.get();
-        }
-
-        return Math.toIntExact(playerRepository.count(specification));
+        return (int) playerRepository.count(new PlayerSpecification(filter));
     }
 
     @Override
     public Player createPlayer(PlayerDto playerDto) {
         Player player = Converter.convertToPlayer(playerDto);
 
-        RaceEntity raceEntity = raceRepository.findByName(playerDto.getRaceDto().getName());
-        player.setRaceEntity(raceEntity);
+        Race race = raceRepository.findByName(playerDto.getRaceDto().getName());
+        player.setRace(race);
 
-        ProfessionEntity professionEntity = professionRepository.findByName(playerDto.getProfessionDto().getName());
-        player.setProfessionEntity(professionEntity);
+        Profession profession = professionRepository.findByName(playerDto.getProfessionDto().getName());
+        player.setProfession(profession);
 
         player.setLevel(calculateCurrentLevel(player.getExperience()));
         player.setUntilNextLevel(calculateUntilNextLevel(player.getLevel(), player.getExperience()));
@@ -61,12 +52,15 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<Player> getPlayersByFilter(Filter filter) {
-        Optional<Specification<Player>> specification = getSpecification(filter);
-        PageRequest pageRequest = getPageRequest(filter);
-        return specification.map(playerSpecification -> playerRepository.findAll(playerSpecification, pageRequest).getContent()).orElseGet(() -> playerRepository.findAll(pageRequest).getContent());
+        Pageable pageable = PageRequest.of(0, filter.getPageSize(), Sort.Direction.ASC,
+                filter.getOrder().getFieldName());;
+        if (filter.getPageNumber() > 1) {
+            pageable = PageRequest.of(filter.getPageNumber() - 1, filter.getPageSize(), Sort.Direction.ASC,
+                    filter.getOrder().getFieldName());
+        }
+        return playerRepository.findAll(new PlayerSpecification(filter), pageable).getContent();
     }
 
-    @Transactional
     @Override
     public Player updatePlayer(PlayerDto playerDto) {
         Player player = playerRepository.findById(playerDto.getId()).orElseThrow(PlayerNotFoundException::new);
@@ -78,10 +72,10 @@ public class PlayerServiceImpl implements PlayerService {
             player.setTitle(playerDto.getTitle());
         }
         if (playerDto.getRaceDto() != null) {
-            player.setRaceEntity(raceRepository.findByName(playerDto.getRaceDto().getName()));
+            player.setRace(raceRepository.findByName(playerDto.getRaceDto().getName()));
         }
         if (playerDto.getProfessionDto() != null) {
-            player.setProfessionEntity(professionRepository.findByName(playerDto.getProfessionDto().getName()));
+            player.setProfession(professionRepository.findByName(playerDto.getProfessionDto().getName()));
         }
         if (playerDto.getExperience() != null) {
             player.setExperience(playerDto.getExperience());
@@ -114,48 +108,11 @@ public class PlayerServiceImpl implements PlayerService {
         }
         return player.get();
     }
-
     private int calculateCurrentLevel(int experience) {
         return (int) ((Math.sqrt(2500 + 200 * experience) - 50) / 100);
     }
 
     private int calculateUntilNextLevel(int level, int experience) {
         return 50 * (level + 1) * (level + 2) - experience;
-    }
-    private Optional<Specification<Player>> getSpecification(Filter filter) {
-        List<Specification<Player>> specificationList = Stream.of(
-                PlayerSpecification.nameLike(filter.getName()),
-                PlayerSpecification.titleLike(filter.getTitle()),
-                PlayerSpecification.equalsRaceName(filter.getRace()),
-                PlayerSpecification.equalsProfessionName(filter.getProfession()),
-                PlayerSpecification.greaterThanOrEqualToBeforeDate(filter.getBefore()),
-                PlayerSpecification.lessThanOrEqualToAfterDate(filter.getAfter()),
-                PlayerSpecification.equalsBanned(filter.getBanned()),
-                PlayerSpecification.greaterThanOrEqualToMinExperience(filter.getMinExperience()),
-                PlayerSpecification.lessThanOrEqualToMaxExperience(filter.getMaxExperience()),
-                PlayerSpecification.greaterThanOrEqualToMinLevel(filter.getMinLevel()),
-                PlayerSpecification.lessThanOrEqualToMaxLevel(filter.getMaxLevel()))
-                .filter(Objects::nonNull)
-                .toList();
-
-        if (specificationList.isEmpty()) {
-            return Optional.empty();
-        }
-
-        Specification<Player> playerSpecification = Specification.where(specificationList.get(0));
-        for (int i = 0; i < specificationList.size(); i++) {
-            playerSpecification = playerSpecification.and(specificationList.get(i));
-        }
-
-        return Optional.of(playerSpecification);
-    }
-    private PageRequest getPageRequest(Filter filter) {
-        if (filter.getPageNumber() == 1 || filter.getPageNumber() == 0) {
-            return PageRequest.of(0, filter.getPageSize(), Sort.Direction.ASC,
-                    String.valueOf(filter.getOrder()).toLowerCase());
-
-        }
-        return PageRequest.of(filter.getPageNumber() - 1, filter.getPageSize(), Sort.Direction.ASC,
-                String.valueOf(filter.getOrder()).toLowerCase());
     }
 }

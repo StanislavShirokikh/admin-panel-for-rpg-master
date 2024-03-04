@@ -10,7 +10,7 @@
                 <tableExists tableName="race"/>
                 <sqlCheck expectedResult="0">
                     SELECT count(*)
-                    FROM raceEntity
+                    FROM race
                     WHERE name in   (('HUMAN'),
                                     ('DWARF'),
                                     ('ELF'),
@@ -40,7 +40,7 @@
                 <tableExists tableName="profession"/>
                 <sqlCheck expectedResult="0">
                     SELECT count(*)
-                    FROM professionEntity
+                    FROM profession
                     WHERE name in  (('WARRIOR'),
                     ('ROGUE'),
                     ('SORCERER'),

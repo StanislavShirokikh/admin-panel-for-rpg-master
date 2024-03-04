@@ -1,7 +1,5 @@
 package com.example.demo.filter;
 
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,8 +9,8 @@ import java.util.Date;
 public class Filter {
     private String name;
     private String title;
-    private Race race;
-    private Profession profession;
+    private String race;
+    private String profession;
     private Date after;
     private Date before;
     private Boolean banned;
