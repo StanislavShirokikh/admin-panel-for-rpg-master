@@ -1,7 +1,5 @@
 package com.example.demo.filter;
 
-import com.example.demo.entity.Profession;
-import com.example.demo.entity.Race;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,18 +7,18 @@ import java.util.Date;
 
 @Data
 public class Filter {
-    String name;
-    String title;
-    Race race;
-    Profession profession;
-    Date after;
-    Date before;
-    Boolean banned;
-    Integer minExperience;
-    Integer maxExperience;
-    Integer minLevel;
-    Integer maxLevel;
-    PlayerOrder order;
-    Integer pageNumber;
-    Integer pageSize;
+    private String name;
+    private String title;
+    private String race;
+    private String profession;
+    private Date after;
+    private Date before;
+    private Boolean banned;
+    private Integer minExperience;
+    private Integer maxExperience;
+    private Integer minLevel;
+    private Integer maxLevel;
+    private PlayerOrder order;
+    private Integer pageNumber;
+    private Integer pageSize;
 }

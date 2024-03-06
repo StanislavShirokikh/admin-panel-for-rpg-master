@@ -1,12 +1,19 @@
 package com.example.demo.entity;
 
-public enum Profession {
-    WARRIOR,
-    ROGUE,
-    SORCERER,
-    CLERIC,
-    PALADIN,
-    NAZGUL,
-    WARLOCK,
-    DRUID
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = "profession")
+public class Profession {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
 }
